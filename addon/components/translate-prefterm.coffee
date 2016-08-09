@@ -17,14 +17,6 @@ TranslatePreftermComponent = Ember.Component.extend KeyboardShortcuts, Translati
       scoped: true
       preventDefault: true
 
-  languageObserver: Ember.observer 'targetLanguage',  (->
-    unless @get('term.id')
-      event=
-        target:
-          value: ''
-      @changeTermValue(@get('term'), event, false)
-    ).on('init')
-
   managePrefTermSaving: (term, save) ->
     promises = []
     termRoles = @parseRolesFromString(term)

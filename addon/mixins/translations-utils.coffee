@@ -29,6 +29,7 @@ TranslationsUtilsMixin = Ember.Mixin.create
     else value = event.target.value
     term.set('literalForm', value)
     term.set('literalFormValues.firstObject.content', value)
+
   actions:
     focusTerm: (bool) ->
       @set 'termIsFocused', bool
