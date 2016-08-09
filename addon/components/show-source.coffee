@@ -14,8 +14,8 @@ ShowSourceComponent = Ember.Component.extend
 
   init: ->
     this._super()
-    if @get('term')
-      unless @get('term.source') then @set('term.source', '')
+    # if @get('term')
+    unless @get('term.source') then @set('term.source', '')
   actions:
     toggleSource: ->
       if @get('displaySource')
