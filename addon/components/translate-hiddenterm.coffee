@@ -16,6 +16,15 @@ TranslateHiddentermComponent = Ember.Component.extend KeyboardShortcuts, Transla
       scoped: true
       preventDefault: true
   placeholder: 'Enter the hidden term and press ENTER'
+
+  languageObserver: Ember.observer 'targetLanguage',  (->
+    unless @get('term.id')
+      event=
+        target:
+          value: ''
+      @changeTermValue(@get('term'), event, false)
+    ).on('init')
+
   actions:
     hiddenTermContentModified: (term, event) ->
       if(event.keyCode == 13 && not event.shiftKey)

@@ -16,6 +16,15 @@ TranslateAlttermComponent =  Ember.Component.extend KeyboardShortcuts, Translati
       action: 'toggleSource'
       scoped: true
       preventDefault: true
+
+  languageObserver: Ember.observer 'targetLanguage',  (->
+    unless @get('term.id')
+      event=
+        target:
+          value: ''
+      @changeTermValue(@get('term'), event, false)
+    ).on('init')
+
   actions:
     altTermContentModified: (term, event) ->
       if(event.keyCode == 13 && not event.shiftKey)
