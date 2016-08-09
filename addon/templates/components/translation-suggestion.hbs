@@ -1,0 +1,18 @@
+<div class="source">
+  {{source}}
+  <div class="toggle {{if collapsed "closed" "opened"}}" {{action 'toggleCollapsed'}}></div>
+</div>
+{{#unless collapsed}}
+  <ul>
+    {{#each translations as |translation|}}
+        <li>
+            <span>{{translation.term}}</span>
+            <ul>
+              {{#each translation.translations_for_term as |result|}}
+                  <li class="translation" {{action 'selectSuggestion' result.translation}}>{{result.translation}}</li>
+              {{/each}}
+            </ul>
+        </li>
+    {{/each}}
+  </ul>
+{{/unless}}

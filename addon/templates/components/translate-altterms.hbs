@@ -1,0 +1,16 @@
+<div class="block">
+  <div class="block-title">
+    <label>Non-preferred terms</label>
+    <i class="fa fa-info-circle" title="Non-preferred terms can be synonyms (words with similar or same meanings) but can also be spelling variants, declensions, abbreviations, etc. They are regularly used by the target group (jobseekers, employers, education institutions) to refer to concepts that are described in ESCO with the preferred term."></i>
+  </div>
+  <div class="block-content">
+    {{#each altTerms as |term index|}}
+      {{translate-altterm term=term concept=concept prefTerm=prefTerm altTerms=altTerms roles=roles allowDelete=true index=index
+      sourceLanguage=sourceLanguage targetLanguage=targetLanguage translationDisabled=translationDisabled saveAltTerm="saveAltTerm"
+      removeAltTerm="removeAltTerm" saveSource="saveSource" displaySuggestions=false}}
+    {{/each}}
+    {{translate-altterm term=newTerm concept=concept prefTerm=prefTerm altTerms=altTerms roles=roles allowDelete=false index="new"
+    sourceLanguage=sourceLanguage targetLanguage=targetLanguage translationDisabled=translationDisabled saveAltTerm="saveNewAltTerm"
+    removeAltTerm="removeNewAltTerm" saveSource="saveNewSource" displaySuggestions=true}}
+  </div>
+</div>

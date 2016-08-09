@@ -1,0 +1,36 @@
+<div class="block">
+    <div class="block-title">
+        <label>Occupation title / Preferred term</label>
+        <i class="fa fa-info-circle" title="Each concept within ESCO has a designated, unique preferred name per ESCO language. Out of a group of terms with similar meaning, the one that best represents the concept is chosen to be the preferred term. The preferred term of a given concept is unique per language and can always be used for cases where the natural gender is not known."></i>
+    </div>
+    <div class="block-content">
+        <div class="term{{if shouldHighlight " focus"}}">
+          <div class="source">
+            {{show-source term=prefTerm saveSource="saveSource" buttonId=(concat "prefSource0") displaySource=displaySource}}
+          </div>
+          <div class="input-box">
+              <input disabled={{translationDisabled}} type="text" value={{prefTerm.literalForm}} class="tabbable pref" name="pref0"
+              onkeyup={{action "prefTermContentModified" prefTerm}}  onchange={{action "changeTermValue" prefTerm value=target.value}}
+              onfocus={{action "focusTerm" true}} onblur={{action "focusTerm" false}} placeholder={{placeholder}}/>
+          </div>
+          {{#if prefTerm.id}}
+            <div class="button-group">
+                <button tabindex=-1 disabled={{translationDisabled}} class="gender preferred {{if prefTerm.preferredMale 'active'}}" {{action 'togglePreferredMale' prefTerm}}>
+                    standard male
+                </button>
+                <button tabindex=-1 disabled={{translationDisabled}} class="gender preferred {{if prefTerm.preferredFemale 'active'}}" {{action 'togglePreferredFemale' prefTerm}}>
+                    standard female
+                </button>
+                <button tabindex=-1 disabled=true class="gender preferred disabled active">
+                    neutral
+                </button>
+            </div>
+          {{/if}}
+          {{#if displaySuggestions}}
+            {{show-suggestions term=prefTerm label=(await concept.defaultPrefLabel) sourceLanguage=sourceLanguage buttonId="prefTerm0"
+            targetLanguage=targetLanguage showSuggestions=showSuggestions shouldSendAction=true
+            toggleSuggestions="toggleSuggestions" closeSuggestions="closeSuggestions" selectSuggestion="selectSuggestion"}}
+          {{/if}}
+        </div>
+    </div>
+</div>

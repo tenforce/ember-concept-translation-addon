@@ -1,0 +1,17 @@
+{{translate-prefterm concept=concept term=prefTerm prefTerm=prefTerm altTerms=altTerms roles=roles language=language sourceLanguage=sourceLanguage targetLanguage=targetLanguage translationDisabled=translationDisabled displaySuggestions=true}}
+<!-- #hide description field
+           #description can no longer be translated, remove or hide the description field for now
+      <div class="block">
+          <div class="block-title">
+              <label>description</label>
+          </div>
+          <div class="block-content">
+            <div class="textarea-box">
+              {{!textarea disabled=translationDisabled value=description change=(action "saveDescription" description)}}
+              <i class="fa fa-magic"></i>
+            </div>
+          </div>
+      </div>-->
+{{translate-altterms concept=concept prefTerm=prefTerm altTerms=altTerms roles=roles language=language sourceLanguage=sourceLanguage targetLanguage=targetLanguage translationDisabled=translationDisabled }}
+{{translate-hiddenterms concept=concept hiddenTerms=hiddenTerms
+roles=roles language=language sourceLanguage=sourceLanguage targetLanguage=targetLanguage translationDisabled=translationDisabled }}

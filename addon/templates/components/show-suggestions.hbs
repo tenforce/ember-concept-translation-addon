@@ -1,0 +1,20 @@
+<div class="suggest" {{action 'toggleSuggestion'}}>
+    <i class="fa fa-magic" name="displaySuggestions" id={{buttonId}}></i>
+    {{#if loaded}}
+        {{#if showSuggestions}}
+            {{#tether-dialog close='closeSuggestions' hasOverlay=false clickOutsideToClose=true target=sButtonId targetAttachment='bottom right' attachment='top right' container-class='translation-suggestions'}}
+                {{#if (await isLoading)}}
+                    <div class="loading">
+                      <i class="fa fa-spinner fa-pulse"></i>
+                    </div>
+                {{else}}
+                    {{#if emptySources}}
+                        <span class="no-suggestions">There are no suggestions for this term.</span>
+                    {{else}}
+                        {{translation-suggestions sources=sources selectSuggestion="selectSuggestion"}}
+                    {{/if}}
+                {{/if}}
+            {{/tether-dialog}}
+        {{/if}}
+    {{/if}}
+</div>

@@ -1,0 +1,16 @@
+<div class="block">
+  <div class="block-title">
+    <label>Hidden terms</label>
+    <i class="fa fa-info-circle" title="Hidden terms are commonly used on the labour market to refer to a concept but are at the same time considered as outdated, misspelled or politically incorrect. Therefore, they are invisible for the end-user."></i>
+  </div>
+  <div class="block-content">
+    {{#each hiddenTerms as |term index|}}
+      {{translate-hiddenterm term=term concept=concept roles=roles allowDelete=true index=index sourceLanguage=sourceLanguage
+      targetLanguage=targetLanguage translationDisabled=translationDisabled saveHiddenTerm="saveHiddenTerm"
+      removeHiddenTerm="removeHiddenTerm" saveSource="saveSource" displaySuggestions=false}}
+    {{/each}}
+    {{translate-hiddenterm term=newTerm concept=concept roles=roles allowDelete=false index="new" sourceLanguage=sourceLanguage
+    targetLanguage=targetLanguage translationDisabled=translationDisabled saveHiddenTerm="saveNewHiddenTerm"
+    removeHiddenTerm="removeNewHiddenTerm" saveSource="saveNewSource" displaySuggestions=true}}
+  </div>
+</div>

@@ -1,0 +1,39 @@
+<div class="term{{if shouldHighlight " focus"}}">
+  <div class="source">
+    {{show-source term=term saveSource="saveSource" buttonId=(concat "altSources" index) displaySource=displaySource}}
+  </div>
+  <div class="input-box">
+      <input type="text" disabled={{translationDisabled}} value={{term.literalForm}} class="tabbable alt" name="alt{{index}}"
+             onkeyup={{action "altTermContentModified" term}} onchange={{action "changeTermValue" term value=target.value}}
+             onfocus={{action "focusTerm" true}} onblur={{action "focusTerm" false}} placeholder={{placeholder}}/>
+  </div>
+  <div class="button-group">
+    {{#if term.id}}
+        <button tabindex=-1 disabled={{translationDisabled}} class="gender preferred {{if term.preferredMale 'active'}}" {{action 'toggleStandardMale' term}}>
+        standard male
+        </button>
+        <button tabindex=-1 disabled={{translationDisabled}} class="gender preferred {{if term.preferredFemale 'active'}}" {{action 'toggleStandardFemale' term}}>
+        standard female
+        </button>
+        <button tabindex=-1 disabled={{translationDisabled}} class="gender {{if term.female 'active'}}" {{action 'toggleFemale' term}}>
+        female
+        </button>
+        <button tabindex=-1 disabled={{translationDisabled}} class="gender {{if term.male 'active'}}" {{action 'toggleMale' term}}>
+        male
+        </button>
+        <button tabindex=-1 disabled={{translationDisabled}} class="gender {{if term.neutral 'active'}}" {{action 'toggleNeutral' term}}>
+        neutral
+        </button>
+    {{/if}}
+  </div>
+  {{#if allowDelete}}
+    <button tabindex=-1 disabled={{translationDisabled}} class="action remove" {{action 'removeAltTerm' term index}}>
+      <i class="fa fa-minus"></i>
+    </button>
+  {{/if}}
+  {{#if displaySuggestions}}
+    {{show-suggestions term=term label=(await concept.defaultPrefLabel) sourceLanguage=sourceLanguage buttonId=(concat "altTerm" index)
+    targetLanguage=targetLanguage showSuggestions=showSuggestions shouldSendAction=true
+    toggleSuggestions="toggleSuggestions" closeSuggestions="closeSuggestions" selectSuggestion="selectSuggestion"}}
+  {{/if}}
+</div>
