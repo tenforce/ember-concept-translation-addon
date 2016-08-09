@@ -1,5 +1,20 @@
-{{translate-prefterm concept=concept term=prefTerm prefTerm=prefTerm altTerms=altTerms roles=roles language=language sourceLanguage=sourceLanguage targetLanguage=targetLanguage translationDisabled=translationDisabled displaySuggestions=true}}
-<!-- #hide description field
+{{#if loading}}
+  <div class="loading">
+    <i class="fa fa-spinner fa-pulse"></i>
+  </div>
+{{else}}
+  <div class="translation-form">
+    <div class="header">
+      <h3>Translation to<div class="language-selector">{{language-selector setLanguage="setLanguage" defaultLang=user.language}}</div></h3>
+      <div class="translation-status" title= {{statusSelectorTitle}}>
+        {{#power-select tabindex=-1 disabled=(not allowStatusChange) options=statusOptions selected=status onchange=(action "setStatus") as |state|}}
+          <span class="status-{{state}}">{{state}}</span>
+        {{/power-select}}
+      </div>
+    </div>
+
+    {{translate-prefterm concept=concept term=prefTerm prefTerm=prefTerm altTerms=altTerms roles=roles language=language sourceLanguage=sourceLanguage targetLanguage=targetLanguage translationDisabled=translationDisabled displaySuggestions=true}}
+    <!-- #hide description field
            #description can no longer be translated, remove or hide the description field for now
       <div class="block">
           <div class="block-title">
@@ -12,6 +27,13 @@
             </div>
           </div>
       </div>-->
-{{translate-altterms concept=concept prefTerm=prefTerm altTerms=altTerms roles=roles language=language sourceLanguage=sourceLanguage targetLanguage=targetLanguage translationDisabled=translationDisabled }}
-{{translate-hiddenterms concept=concept hiddenTerms=hiddenTerms
-roles=roles language=language sourceLanguage=sourceLanguage targetLanguage=targetLanguage translationDisabled=translationDisabled }}
+    {{translate-altterms concept=concept prefTerm=prefTerm altTerms=altTerms roles=roles language=language sourceLanguage=sourceLanguage targetLanguage=targetLanguage translationDisabled=translationDisabled }} {{translate-hiddenterms concept=concept hiddenTerms=hiddenTerms
+    roles=roles language=language sourceLanguage=sourceLanguage targetLanguage=targetLanguage translationDisabled=translationDisabled }}
+
+    {{#unless emptyGenderBox}}
+      <div class="block">
+        {{visual-gender-box altTerms=altTerms prefTerm=prefTerm}}
+      </div>
+    {{/unless}}
+  </div>
+{{/if}}

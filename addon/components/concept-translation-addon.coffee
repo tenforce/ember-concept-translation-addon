@@ -42,7 +42,7 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
     return unless @get('concept') and @get('language')
     @ensureTermsAreCorrect()
   ensureTermsAreCorrect: ->
-    console.log("setting labels in #{@get('language')} for concept #{@get('concept.id')}")
+    # console.log("setting labels in #{@get('language')} for concept #{@get('concept.id')}")
     concept = @get('concept')
     desc = @get('concept.description')?.findBy('language', @get('language'))
     if desc
