@@ -1,0 +1,87 @@
+<div class="title">Visual gender distribution</div>
+
+<div class="col male">
+{{#unless emptyMale}}
+  <i class="fa fa-male" aria-hidden="true"></i>
+  <label>I am</label>
+  <div class="list">
+    <div class="line"></div>
+    <div class="list-item default">
+      {{#if standardMaleTerm.literalForm}}
+        <span class="wrapper">
+          <label>{{standardMaleTerm.literalForm}}</label>
+        </span>
+      {{/if}}
+    </div>
+    <div class="list-item">
+      {{#unless emptyAltMale}}
+      <span class="wrapper">
+          {{#each maleTerms as |maleTerm|}}
+            {{#if maleTerm.literalForm}}
+            <label>{{maleTerm.literalForm}}</label>
+            {{/if}}
+          {{/each}}
+      </span>
+      {{/unless}}
+    </div>
+  </div>
+{{/unless}}
+</div>
+
+
+<div class="col uni">
+{{#unless emptyNeutral}}
+    <i class="fa fa-building" aria-hidden="true"></i>
+    <label>We are looking for</label>
+    <div class="list">
+        <div class="line"></div>
+        <div class="list-item default">
+          {{#if prefTerm.literalForm}}
+            <span class="wrapper">
+                <label>{{prefTerm.literalForm}}</label>
+            </span>
+          {{/if}}
+        </div>
+        <div class="list-item">
+          {{#unless emptyAltNeutral}}
+            <span class="wrapper">
+              {{#each neutralTerms as |neutralTerm|}}
+                {{#if neutralTerm.literalForm}}
+                  <label>{{neutralTerm.literalForm}}</label>
+                {{/if}}
+              {{/each}}
+            </span>
+          {{/unless}}
+        </div>
+    </div>
+{{/unless}}
+</div>
+
+
+<div class="col female">
+{{#unless emptyFemale}}
+    <i class="fa fa-female" aria-hidden="true"></i>
+    <label>I am</label>
+    <div class="list">
+      <div class="line"></div>
+      <div class="list-item default">
+        {{#if standardFemaleTerm.literalForm}}
+          <span class="wrapper">
+            <label>{{standardFemaleTerm.literalForm}}</label>
+          </span>
+        {{/if}}
+      </div>
+      <div class="list-item">
+        {{#unless emptyAltFemale}}
+          <span class="wrapper">
+            {{#each femaleTerms as |femaleTerm|}}
+              {{#if femaleTerm.literalForm}}
+                <label>{{femaleTerm.literalForm}}</label>
+              {{/if}}
+            {{/each}}
+          </span>
+        {{/unless}}
+      </div>
+    </div>
+{{/unless}}
+</div>
