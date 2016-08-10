@@ -30,6 +30,12 @@ TranslationsUtilsMixin = Ember.Mixin.create
     term.set('literalForm', value)
     term.set('literalFormValues.firstObject.content', value)
 
+  createQuestUrl: (text, source, target) ->
+    text = escape(text)
+    source = escape(source)
+    target = escape(target)
+    return "https://webgate.ec.testa.eu/questmetasearch/search.php?text=#{text}&source=#{source}&target=#{target}&ui=addin"
+
   actions:
     focusTerm: (bool) ->
       @set 'termIsFocused', bool

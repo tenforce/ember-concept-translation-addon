@@ -9,6 +9,9 @@
 TranslateAlttermComponent =  Ember.Component.extend KeyboardShortcuts, TranslationsUtils, SuggestionsManager, SourceManager, TermManager,
   layout: layout
   keyboardShortcuts:
+    'ctrl+alt+q':
+      action: 'goToQuestUrl'
+      scoped: true
     'ctrl+alt+d':
       action: 'deleteTerm'
       scoped: true
@@ -17,9 +20,19 @@ TranslateAlttermComponent =  Ember.Component.extend KeyboardShortcuts, Translati
       scoped: true
       preventDefault: true
 
-  
+  pathToQuest: Ember.computed 'term.literalForm', ->
+    term = @get('term')
+    if term.get('literalForm')
+      target = @get('targetLanguage')
+      source = "en"
+      text = term.get('literalForm')
+      return @createQuestUrl(text, source, target)
+    return @createQuestUrl("", source, target)
 
   actions:
+    goToQuestUrl: ->
+      window.open(@get('pathToQuest'))
+
     altTermContentModified: (term, event) ->
       if(event.keyCode == 13 && not event.shiftKey)
         @changeTermValue(term, event, true)
