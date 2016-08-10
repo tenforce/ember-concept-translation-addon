@@ -6,6 +6,7 @@
       <input disabled={{translationDisabled}} type="text" value={{term.literalForm}} onkeyup={{action "hiddenTermContentModified" term}}
              onchange={{action "changeTermValue" term value=target.value}}  class="tabbable hidden" name="hidden{{index}}"
       onfocus={{action "focusTerm" true}} onblur={{action "focusTerm" false}} placeholder={{placeholder}}/>
+      <button class="quest-btn" {{action 'goToQuestUrl'}}></button>
   </div>
   {{#if allowDelete}}
     <button tabindex=-1 disabled={{translationDisabled}} class="action remove" {{action 'removeHiddenTerm' term index}}>

@@ -8,6 +8,9 @@
 TranslateHiddentermComponent = Ember.Component.extend KeyboardShortcuts, TranslationsUtils, SuggestionsManager, SourceManager,
   layout: layout
   keyboardShortcuts:
+    'ctrl+alt+q':
+      action: 'goToQuestUrl'
+      scoped: true
     'ctrl+alt+d':
       action: 'deleteTerm'
       scoped: true
@@ -16,8 +19,18 @@ TranslateHiddentermComponent = Ember.Component.extend KeyboardShortcuts, Transla
       scoped: true
       preventDefault: true
   placeholder: 'Enter the hidden term and press ENTER'
+  pathToQuest: Ember.computed 'term.literalForm', ->
+    term = @get('term')
+    if term.get('literalForm')
+      target = @get('targetLanguage')
+      source = "en"
+      text = term.get('literalForm')
+      return @createQuestUrl(text, source, target)
+    return @createQuestUrl("", source, target)
 
   actions:
+    goToQuestUrl: ->
+      window.open(@get('pathToQuest'))
     hiddenTermContentModified: (term, event) ->
       if(event.keyCode == 13 && not event.shiftKey)
         @changeTermValue(term, event, true)

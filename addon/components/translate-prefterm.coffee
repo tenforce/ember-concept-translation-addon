@@ -9,6 +9,9 @@
 TranslatePreftermComponent = Ember.Component.extend KeyboardShortcuts, TranslationsUtils, SuggestionsManager, SourceManager, TermManager,
   layout: layout
   keyboardShortcuts:
+    'ctrl+alt+q':
+      action: 'goToQuestUrl'
+      scoped: true
     'ctrl+alt+d':
       action: 'deleteTerm'
       scoped: true
@@ -17,6 +20,14 @@ TranslatePreftermComponent = Ember.Component.extend KeyboardShortcuts, Translati
       scoped: true
       preventDefault: true
 
+  pathToQuest: Ember.computed 'term.literalForm', ->
+    term = @get('term')
+    if term.get('literalForm')
+      target = @get('targetLanguage')
+      source = "en"
+      text = term.get('literalForm')
+      return @createQuestUrl(text, source, target)
+    return @createQuestUrl("", source, target)
   managePrefTermSaving: (term, save) ->
     promises = []
     termRoles = @parseRolesFromString(term)
@@ -31,6 +42,8 @@ TranslatePreftermComponent = Ember.Component.extend KeyboardShortcuts, Translati
       if save then term.save()
 
   actions:
+    goToQuestUrl: ->
+      window.open(@get('pathToQuest'))
     prefTermContentModified: (term, event) ->
       if(event.keyCode == 13 && not event.shiftKey)
         @managePrefTermSaving(term, true)
