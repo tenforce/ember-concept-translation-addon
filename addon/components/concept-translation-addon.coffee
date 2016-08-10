@@ -27,7 +27,7 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
   userTasks: Ember.inject.service()
   user: Ember.computed.alias 'currentUser.user'
   classNames: ["concept-translation"]
-  statusOptions: ["to do", "in progress", "translated", "reviewed", "reviewed with changes", "confirmed"]
+  statusOptions: ["to do", "in progress", "translated", "reviewed without comments", "reviewed with comments", "confirmed"]
   translationDisabled: Ember.computed 'status', ->
     ["none", "confirmed", "reviewed"].contains @get('status')
   language: Ember.computed 'concept', 'currentUser.user.language', ->
@@ -145,7 +145,7 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
 
   actions:
     ctrlalt1: ->
-      status = "todo"
+      status = "to do"
       @setStatus(status)
     ctrlalt2: ->
       status = "in progress"
@@ -154,10 +154,10 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
       status = "translated"
       @setStatus(status)
     ctrlalt4: ->
-      status = "reviewed"
+      status = "reviewed without comments"
       @setStatus(status)
     ctrlalt5: ->
-      status = "reviewed with changes"
+      status = "reviewed with comments"
       @setStatus(status)
     ctrlalt6: ->
       status = "confirmed"
