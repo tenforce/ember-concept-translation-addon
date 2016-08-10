@@ -1,13 +1,11 @@
 <div class="term{{if shouldHighlight " focus"}}">
-  <div class="quest">
-    <button class="quest-button" {{action 'goToQuestUrl'}}>Q</button>
-  </div>
   <div class="source">
     {{show-source term=term saveSource="saveSource" buttonId=(concat "altSources" index) displaySource=displaySource}}
   </div>
   <div class="input-box">
     <input type="text" disabled= {{translationDisabled}} value= {{term.literalForm}} class="tabbable alt" name="alt{{index}}" onkeyup= {{action "altTermContentModified" term}} onchange= {{action "changeTermValue" term value=target.value}} onfocus= {{action "focusTerm" true}}
         onblur= {{action "focusTerm" false}} placeholder= {{placeholder}} />
+    <button class="quest-btn" {{action 'goToQuestUrl'}}>Q</button>
   </div>
   <div class="button-group">
     {{#if term.id}}
