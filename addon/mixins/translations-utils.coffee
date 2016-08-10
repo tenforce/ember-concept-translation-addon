@@ -1,7 +1,7 @@
 `import Ember from 'ember'`
 
 TranslationsUtilsMixin = Ember.Mixin.create
-  placeholder: "Use '//' to add gender and press ENTER"
+  placeholder: "e.g., actress//sf and confirm with ENTER"
   emptyTerm: Ember.computed 'term.literalForm', ->
     if @get('term.literalForm') then return false
     else return true
