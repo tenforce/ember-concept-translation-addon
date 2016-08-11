@@ -18,7 +18,7 @@ TranslateHiddentermComponent = Ember.Component.extend KeyboardShortcuts, Transla
       action: 'toggleSource'
       scoped: true
       preventDefault: true
-  placeholder: 'Enter the hidden term and press ENTER'
+  placeholder: "e.g., \"actress\" and confirm with ENTER"
   pathToQuest: Ember.computed 'term.literalForm', ->
     term = @get('term')
     if term.get('literalForm')
