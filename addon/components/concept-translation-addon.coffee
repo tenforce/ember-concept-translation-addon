@@ -3,8 +3,9 @@
 `import KeyboardShortcuts from 'ember-keyboard-shortcuts/mixins/component';`
 `import TranslationsUtils from '../mixins/translations-utils'`
 `import TermManager from '../mixins/term-manager'`
+`import UserRights from '../mixins/user-rights'`
 
-ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, TranslationsUtils, TermManager,
+ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, TranslationsUtils, TermManager, UserRights,
   layout: layout
   keyboardShortcuts:
     # <- statusses #
@@ -27,7 +28,45 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
   userTasks: Ember.inject.service()
   user: Ember.computed.alias 'currentUser.user'
   classNames: ["concept-translation"]
-  statusOptions: ["to do", "in progress", "translated", "reviewed without comments", "reviewed with comments", "confirmed"]
+  statusOptions: Ember.computed 'userIsTranslator', 'userIsReviewer', 'userIsAdmin', ->
+    if @get 'userIsAdmin'
+      return [{status:"to do"}, {status:"in progress"}, {status:"translated"}, {status:"reviewed without comments"}, {status:"reviewed with
+ comments"}, {status:"confirmed"}]
+    array = []
+    if @get 'userIsTranslator'
+      array.push(status:"to do")
+    else
+      array.push(status:"to do", disabled:true)
+
+    if @get 'userIsTranslator'
+      array.push(status:"in progress")
+    else
+      array.push(status:"in progress", disabled:true)
+
+    if @get 'userIsTranslator'
+      array.push(status:"translated")
+    else
+      array.push(status:"translated", disabled:true)
+
+    if @get 'userIsReviewer'
+      array.push(status:"reviewed without comments")
+    else
+      array.push(status:"reviewed without comments", disabled:true)
+
+    if @get 'userIsReviewer'
+      array.push(status:"reviewed with comments")
+    else
+      array.push(status:"reviewed with comments", disabled:true)
+
+    if @get 'userIsReviewer'
+      array.push(status:"confirmed")
+    else
+      array.push(status:"confirmed", disabled:true)
+    return array
+
+  statusOption: undefined
+  status: Ember.computed 'statusOption', ->
+    @get 'statusOption.status'
   translationDisabled: Ember.computed 'status', ->
     ["none", "confirmed", "reviewed"].contains @get('status')
   language: Ember.computed 'concept', 'currentUser.user.language', ->
@@ -73,7 +112,7 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
     @get('store').query('task', 'filter[concept][id]': @get('concept').get('id')).then (tasks) =>
       unless @get('isDestroyed')
         @set 'tasks', tasks
-        @set 'status', @get('tasks').findBy('language', @get('language'))?.get('status') || "none"
+        @set 'statusOption', {status:@get('tasks').findBy('language', @get('language'))?.get('status') || "none"}
   _ensurePrefLabels: ->
     concept = @get 'concept'
     unless @get('roles')
@@ -110,11 +149,11 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
   setStatus: (status) ->
     if @get 'allowStatusChange'
       task = @get('tasks').findBy('language', @get('language'))
-      task.set('status', status)
+      task.set('status', status.status)
       task.save().then =>
         @get('userTasks').decrementProperty(@get('status').replace(`/ /g, ''`)) # decrement old status
-        @get('userTasks').incrementProperty(status.replace(`/ /g, ''`)) #increment new status
-        @set 'status', status
+        @get('userTasks').incrementProperty(status.status.replace(`/ /g, ''`)) #increment new status
+        @set 'statusOption', status
     else console.log "status change not allowed"
 
   emptyGenderBox: Ember.computed 'loading', 'emptyPrefTerm', 'emptyAltTerms',   ->
