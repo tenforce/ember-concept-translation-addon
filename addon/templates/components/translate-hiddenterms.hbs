@@ -7,10 +7,10 @@
     {{#each hiddenTerms as |term index|}}
       {{translate-hiddenterm term=term concept=concept roles=roles allowDelete=true index=index sourceLanguage=sourceLanguage
       targetLanguage=targetLanguage translationDisabled=translationDisabled saveHiddenTerm="saveHiddenTerm"
-      removeHiddenTerm="removeHiddenTerm" saveSource="saveSource" displaySuggestions=false}}
+      removeHiddenTerm="removeHiddenTerm" saveSource="saveSource" displaySuggestions=displaySuggestions showQuest=showQuest showSource=showSource}}
     {{/each}}
     {{translate-hiddenterm term=newTerm concept=concept roles=roles allowDelete=false index="new" sourceLanguage=sourceLanguage
     targetLanguage=targetLanguage translationDisabled=translationDisabled saveHiddenTerm="saveNewHiddenTerm"
-    removeHiddenTerm="removeNewHiddenTerm" saveSource="saveNewSource" displaySuggestions=true}}
+    removeHiddenTerm="removeNewHiddenTerm" saveSource="saveNewSource" displaySuggestions=displaySuggestions showQuest=showQuest showSource=showSource}}
   </div>
 </div>

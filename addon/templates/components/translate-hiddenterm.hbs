@@ -1,21 +1,22 @@
 <div class="term{{if shouldHighlight " focus"}}">
-  <div class="source">
-    {{show-source term=term saveSource="saveSource" buttonId=(concat "hiddenSources" index) displaySource=displaySource}}
-  </div>
+  {{#if showSource}}
+    <div class="source"> {{show-source term=term saveSource="saveSource" buttonId=(concat "hiddenSources" index) displaySource=displaySource}}
+    </div>
+  {{/if}}
   <div class="input-box">
-      <input disabled={{translationDisabled}} type="text" value={{term.literalForm}} onkeyup={{action "hiddenTermContentModified" term}}
-             onchange={{action "changeTermValue" term value=target.value}}  class="tabbable hidden" name="hidden{{index}}"
-      onfocus={{action "focusTerm" true}} onblur={{action "focusTerm" false}} placeholder={{placeholder}}/>
-      <button class="quest-btn" {{action 'goToQuestUrl'}}  title='Link to Quest' tabindex=-1></button>
+    <input disabled= {{translationDisabled}} type="text" value= {{term.literalForm}} onkeyup= {{action "hiddenTermContentModified" term}} onchange= {{action "changeTermValue" term value=target.value}} class="tabbable hidden" name="hidden{{index}}" onfocus= {{action "focusTerm" true}}
+        onblur= {{action "focusTerm" false}} placeholder= {{placeholder}} />
+    {{#if showQuest}}
+      <button class="quest-btn" {{action 'goToQuestUrl'}} title='Link to Quest' tabindex=-1></button>
+    {{/if}}
   </div>
   {{#if allowDelete}}
-    <button tabindex=-1 disabled={{translationDisabled}} class="action remove" {{action 'removeHiddenTerm' term index}}>
+    <button tabindex=-1 disabled= {{translationDisabled}} class="action remove" {{action 'removeHiddenTerm' term index}}>
       <i class="fa fa-minus"></i>
     </button>
   {{/if}}
   {{#if displaySuggestions}}
-    {{show-suggestions term=term label=(await concept.defaultPrefLabel) sourceLanguage=sourceLanguage buttonId=(concat "hiddenTerm" index)
-    targetLanguage=targetLanguage showSuggestions=showSuggestions shouldSendAction=true
-    toggleSuggestions="toggleSuggestions" closeSuggestions="closeSuggestions" selectSuggestion="selectSuggestion"}}
+    {{show-suggestions term=term label=(await concept.defaultPrefLabel) sourceLanguage=sourceLanguage buttonId=(concat "hiddenTerm" index) targetLanguage=targetLanguage showSuggestions=showSuggestions shouldSendAction=true toggleSuggestions="toggleSuggestions"
+    closeSuggestions="closeSuggestions" selectSuggestion="selectSuggestion"}}
   {{/if}}
 </div>

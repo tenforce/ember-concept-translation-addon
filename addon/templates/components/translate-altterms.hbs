@@ -7,10 +7,10 @@
     {{#each altTerms as |term index|}}
       {{translate-altterm term=term concept=concept prefTerm=prefTerm altTerms=altTerms roles=roles allowDelete=true index=index
       sourceLanguage=sourceLanguage targetLanguage=targetLanguage translationDisabled=translationDisabled saveAltTerm="saveAltTerm"
-      removeAltTerm="removeAltTerm" saveSource="saveSource" displaySuggestions=false}}
+      removeAltTerm="removeAltTerm" saveSource="saveSource" displaySuggestions=displaySuggestions showQuest=showQuest showSource=showSource}}
     {{/each}}
     {{translate-altterm term=newTerm concept=concept prefTerm=prefTerm altTerms=altTerms roles=roles allowDelete=false index="new"
     sourceLanguage=sourceLanguage targetLanguage=targetLanguage translationDisabled=translationDisabled saveAltTerm="saveNewAltTerm"
-    removeAltTerm="removeNewAltTerm" saveSource="saveNewSource" displaySuggestions=true}}
+    removeAltTerm="removeNewAltTerm" saveSource="saveNewSource" displaySuggestions=displaySuggestions showQuest=showQuest showSource=showSource}}
   </div>
 </div>

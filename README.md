@@ -4,7 +4,7 @@ This is an ember addon for the translation frontend (`git@git.tenforce.com:esco/
 
 ## Usage
 
-Add `{{concept-translation-addon concept=your.model defaultLang=your.user.language}}` to your hbs file to use the addon.
+Add `{{concept-translation-addon concept=model defaultLang=user.language showQuest=false showSuggestions=false showSource=false}}` to your hbs file to use the addon.
 
 ## Installation
 

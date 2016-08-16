@@ -13,7 +13,7 @@
       </div>
     </div>
 
-    {{translate-prefterm concept=concept term=prefTerm prefTerm=prefTerm altTerms=altTerms roles=roles language=language sourceLanguage=sourceLanguage targetLanguage=targetLanguage translationDisabled=translationDisabled displaySuggestions=true}}
+    {{translate-prefterm concept=concept term=prefTerm prefTerm=prefTerm altTerms=altTerms roles=roles language=language sourceLanguage=sourceLanguage targetLanguage=targetLanguage translationDisabled=translationDisabled displaySuggestions=showSuggestions showQuest=showQuest showSource=showSource}}
     <!-- #hide description field
            #description can no longer be translated, remove or hide the description field for now
       <div class="block">
@@ -27,8 +27,8 @@
             </div>
           </div>
       </div>-->
-    {{translate-altterms concept=concept prefTerm=prefTerm altTerms=altTerms roles=roles language=language sourceLanguage=sourceLanguage targetLanguage=targetLanguage translationDisabled=translationDisabled }} {{translate-hiddenterms concept=concept hiddenTerms=hiddenTerms
-    roles=roles language=language sourceLanguage=sourceLanguage targetLanguage=targetLanguage translationDisabled=translationDisabled }}
+    {{translate-altterms concept=concept prefTerm=prefTerm altTerms=altTerms roles=roles language=language sourceLanguage=sourceLanguage targetLanguage=targetLanguage translationDisabled=translationDisabled displaySuggestions=showSuggestions showQuest=showQuest showSource=showSource}} {{translate-hiddenterms concept=concept hiddenTerms=hiddenTerms
+    roles=roles language=language sourceLanguage=sourceLanguage targetLanguage=targetLanguage translationDisabled=translationDisabled displaySuggestions=showSuggestions showQuest=showQuest showSource=showSource}}
 
     {{#unless emptyGenderBox}}
       <div class="block">
