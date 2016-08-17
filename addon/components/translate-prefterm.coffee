@@ -43,7 +43,8 @@ TranslatePreftermComponent = Ember.Component.extend KeyboardShortcuts, Translati
 
   actions:
     goToQuestUrl: ->
-      window.open(@get('pathToQuest'))
+      if @get 'showQuest'
+        window.open(@get('pathToQuest'))
     prefTermContentModified: (term, event) ->
       if(event.keyCode == 13 && not event.shiftKey)
         @managePrefTermSaving(term, true)

@@ -30,7 +30,8 @@ TranslateHiddentermComponent = Ember.Component.extend KeyboardShortcuts, Transla
 
   actions:
     goToQuestUrl: ->
-      window.open(@get('pathToQuest'))
+      if @get 'showQuest'
+        window.open(@get('pathToQuest'))
     hiddenTermContentModified: (term, event) ->
       if(event.keyCode == 13 && not event.shiftKey)
         @changeTermValue(term, event, true)
