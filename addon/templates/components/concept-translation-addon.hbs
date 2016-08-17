@@ -4,14 +4,14 @@
   </div>
 {{else}}
   <div class="translation-form">
-    <div class="header">
+    {{!-- <div class="header">
       <h3>Translation to<div class="language-selector">{{language-selector setLanguage="setLanguage" defaultLang=user.language languages=languages}}</div></h3>
       <div class="translation-status" title= {{statusSelectorTitle}}>
         {{#power-select tabindex=-1 disabled=(not allowStatusChange) options=statusOptions selected=status onchange=(action "setStatus") as |state|}}
           <span class="status-{{state}}">{{state}}</span>
         {{/power-select}}
       </div>
-    </div>
+    </div> --}}
 
     {{translate-prefterm concept=concept term=prefTerm prefTerm=prefTerm altTerms=altTerms roles=roles language=language sourceLanguage=sourceLanguage targetLanguage=targetLanguage translationDisabled=translationDisabled displaySuggestions=showSuggestions showQuest=showQuest showSource=showSource}}
     <!-- #hide description field

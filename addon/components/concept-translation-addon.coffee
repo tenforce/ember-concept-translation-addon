@@ -171,10 +171,10 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
       Ember.run.next =>
         @$('.tabbable[name=hiddennew]')[0]?.focus()
 
-    setLanguage: (lang) ->
-      @set 'language', lang.id
-    setStatus: (status) ->
-      @setStatus(status)
+    # setLanguage: (lang) ->
+    #   @set 'language', lang.id
+    # setStatus: (status) ->
+    #   @setStatus(status)
     saveDescription: (description) ->
       if @get('concept.description')
         descObj = @get('concept.description').findBy('language', @get('language'))
