@@ -29,7 +29,6 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
   classNames: ["concept-translation"]
   statusOptions: ["to do", "in progress", "translated", "reviewed without comments", "reviewed with comments", "confirmed"]
   translationDisabled: Ember.computed 'status', ->
-    console.log @get 'status'
     ["none", "confirmed", "reviewed"].contains @get('status')
   language: Ember.computed 'concept', 'currentUser.user.language', ->
     @get('currentUser.user.language')
@@ -39,7 +38,7 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
   init: ->
     @_super(arguments)
     @ensureTermsAreCorrect()
-  uglyObserver:  Ember.observer 'concept.id', 'language', ->
+  uglyObserver: Ember.observer 'concept.id', 'language', ->
     return unless @get('concept') and @get('language')
     @ensureTermsAreCorrect()
   ensureTermsAreCorrect: ->
@@ -78,7 +77,7 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
   _ensurePrefLabels: ->
     concept = @get 'concept'
     unless @get('roles')
-      @get('store').findAll('label-role').then  (roles) =>
+      @get('store').findAll('label-role').then (roles) =>
         unless @get('isDestroyed')
           @set 'roles', roles
           @initPrefTerm(concept, roles)
@@ -118,7 +117,7 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
         @set 'status', status
     else console.log "status change not allowed"
 
-  emptyGenderBox: Ember.computed 'loading', 'emptyPrefTerm', 'emptyAltTerms',   ->
+  emptyGenderBox: Ember.computed 'loading', 'emptyPrefTerm', 'emptyAltTerms', ->
     unless @get('loading')
       return @get('emptyPrefTerm') and @get('emptyAltTerms')
 
@@ -126,7 +125,7 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
     length= false
     gender = false
     if @get('prefTerm.literalForm') then length = true
-    if @get('prefTerm.neutral')  then gender = true
+    if @get('prefTerm.neutral') then gender = true
     else if @get('prefTerm.preferredFemale') then gender = true
     else if @get('prefTerm.preferredMale') then gender = true
     return not(length and gender)
@@ -135,7 +134,7 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
       length= false
       gender = false
       if alt.get('literalForm') then length = true
-      if alt.get('neutral')  then gender = true
+      if alt.get('neutral') then gender = true
       else if alt.get('preferredFemale') then gender = true
       else if alt.get('preferredMale') then gender = true
       else if alt.get('female') then gender = true
@@ -145,6 +144,8 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
     else return true
 
   actions:
+    showTerms: ->
+      @toggleProperty('showElements')
     ctrlalt1: ->
       status = "to do"
       @setStatus(status)
@@ -172,10 +173,10 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
       Ember.run.next =>
         @$('.tabbable[name=hiddennew]')[0]?.focus()
 
-    # setLanguage: (lang) ->
-    #   @set 'language', lang.id
-    # setStatus: (status) ->
-    #   @setStatus(status)
+    setLanguage: (lang) ->
+      @set 'language', lang.id
+    setStatus: (status) ->
+      @setStatus(status)
     saveDescription: (description) ->
       if @get('concept.description')
         descObj = @get('concept.description').findBy('language', @get('language'))

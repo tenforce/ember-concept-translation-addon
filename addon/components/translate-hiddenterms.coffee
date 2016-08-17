@@ -23,8 +23,10 @@ TranslateHiddentermsComponent = Ember.Component.extend TranslationsUtils, Source
     term.destroyRecord()
     if term.get('id')
       @get('concept').save()
-
+  newField: false
   actions:
+    showNewField: ->
+      @toggleProperty('newField')
     saveHiddenTerm: (term) ->
       @manageHiddenTermSaving(term)
     saveNewHiddenTerm: (term) ->
@@ -32,6 +34,8 @@ TranslateHiddentermsComponent = Ember.Component.extend TranslationsUtils, Source
       @manageHiddenTermSaving(term).then =>
         newterm = @generateHiddenTerm()
         @set('newTerm', newterm)
+      @set('newField', false)
+
     removeHiddenTerm: (term, index) ->
       @removeHiddenTerm(term, index)
     removeNewHiddenTerm: (term, index) ->

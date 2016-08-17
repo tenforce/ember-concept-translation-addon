@@ -23,6 +23,8 @@ TranslateAlttermsComponent = Ember.Component.extend TranslationsUtils, SourceSav
   newTerm: Ember.computed ->
     @generateAltTerm()
 
+  newField: false
+
   manageAltTermSaving: (term, save) ->
     promises = []
     termRoles = @parseRolesFromString(term)
@@ -39,6 +41,8 @@ TranslateAlttermsComponent = Ember.Component.extend TranslationsUtils, SourceSav
   layout: layout
 
   actions:
+    showNewField: ->
+      @toggleProperty('newField')
 
     saveAltTerm: (term) ->
       @manageAltTermSaving(term, true)
@@ -48,6 +52,8 @@ TranslateAlttermsComponent = Ember.Component.extend TranslationsUtils, SourceSav
         term.save().then =>
           newterm = @generateAltTerm()
           @set('newTerm', newterm)
+      @set('newField', false)
+      
     removeAltTerm: (term, index) ->
       @removeAltTerm(term, index)
     removeNewAltTerm: (term, index) ->
