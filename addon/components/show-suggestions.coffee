@@ -51,6 +51,7 @@ ShowSuggestionsComponent = Ember.Component.extend
       else
         @toggleProperty('showSuggestions')
     selectSuggestion: (translation) ->
-      @sendAction('selectSuggestion', @get('term'), translation)
+      unless @get('disabled')
+        @sendAction('selectSuggestion', @get('term'), translation)
 
 `export default ShowSuggestionsComponent`

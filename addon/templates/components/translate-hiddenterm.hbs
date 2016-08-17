@@ -1,6 +1,7 @@
 <div class="term{{if shouldHighlight " focus"}}">
   {{#if showSource}}
-    <div class="source"> {{show-source term=term saveSource="saveSource" buttonId=(concat "hiddenSources" index) displaySource=displaySource}}
+    <div class="source"> {{show-source term=term saveSource="saveSource" buttonId=(concat "hiddenSources" index) displaySource=displaySource
+    disabled=translationDisabled}}
     </div>
   {{/if}}
   <div class="input-box">
@@ -17,6 +18,6 @@
   {{/if}}
   {{#if displaySuggestions}}
     {{show-suggestions term=term label=(await concept.defaultPrefLabel) sourceLanguage=sourceLanguage buttonId=(concat "hiddenTerm" index) targetLanguage=targetLanguage showSuggestions=showSuggestions shouldSendAction=true toggleSuggestions="toggleSuggestions"
-    closeSuggestions="closeSuggestions" selectSuggestion="selectSuggestion"}}
+    closeSuggestions="closeSuggestions" selectSuggestion="selectSuggestion" disabled=translationDisabled}}
   {{/if}}
 </div>

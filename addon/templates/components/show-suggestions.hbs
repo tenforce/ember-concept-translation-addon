@@ -1,5 +1,5 @@
 <div class="suggest" {{action 'toggleSuggestion'}}>
-    <i class="fa fa-magic" name="displaySuggestions" id={{buttonId}}></i>
+    <i class="fa fa-magic{{if disabled " disabled"}}" name="displaySuggestions" id={{buttonId}}></i>
     {{#if loaded}}
         {{#if showSuggestions}}
             {{#tether-dialog close='closeSuggestions' hasOverlay=false clickOutsideToClose=true target=sButtonId targetAttachment='bottom right' attachment='top right' container-class='translation-suggestions'}}

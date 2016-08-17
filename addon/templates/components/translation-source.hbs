@@ -1,2 +1,2 @@
-<input type="text" disabled={{translationDisabled}} value={{source}}
+<input type="text" class="input source{{if disabled " disabled"}}" disabled={{disabled}} value={{source}}
        onkeyup={{action "sourceContentModified" source}}/>
