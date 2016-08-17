@@ -4,16 +4,18 @@
   </div>
 {{else}}
   <div class="translation-form">
-    {{!-- <div class="header">
-      <h3>Translation to<div class="language-selector">{{language-selector setLanguage="setLanguage" defaultLang=user.language languages=languages}}</div></h3>
+    <div class="header">
+      <h3>Terms</h3>
+      {{!-- <h3>Translation to<div class="language-selector">{{language-selector setLanguage="setLanguage" defaultLang=user.language languages=languages}}</div></h3>
       <div class="translation-status" title= {{statusSelectorTitle}}>
         {{#power-select tabindex=-1 disabled=(not allowStatusChange) options=statusOptions selected=status onchange=(action "setStatus") as |state|}}
           <span class="status-{{state}}">{{state}}</span>
         {{/power-select}}
-      </div>
-    </div> --}}
+      </div> --}}
+    </div>
 
-    {{translate-prefterm concept=concept term=prefTerm prefTerm=prefTerm altTerms=altTerms roles=roles language=language sourceLanguage=sourceLanguage targetLanguage=targetLanguage translationDisabled=translationDisabled displaySuggestions=showSuggestions showQuest=showQuest showSource=showSource}}
+    {{translate-prefterm concept=concept term=prefTerm prefTerm=prefTerm altTerms=altTerms roles=roles language=language sourceLanguage=sourceLanguage targetLanguage=targetLanguage translationDisabled=translationDisabled displaySuggestions=showSuggestions
+    showQuest=showQuest showSource=showSource}}
     <!-- #hide description field
            #description can no longer be translated, remove or hide the description field for now
       <div class="block">
@@ -27,8 +29,9 @@
             </div>
           </div>
       </div>-->
-    {{translate-altterms concept=concept prefTerm=prefTerm altTerms=altTerms roles=roles language=language sourceLanguage=sourceLanguage targetLanguage=targetLanguage translationDisabled=translationDisabled displaySuggestions=showSuggestions showQuest=showQuest showSource=showSource}} {{translate-hiddenterms concept=concept hiddenTerms=hiddenTerms
-    roles=roles language=language sourceLanguage=sourceLanguage targetLanguage=targetLanguage translationDisabled=translationDisabled displaySuggestions=showSuggestions showQuest=showQuest showSource=showSource}}
+    {{translate-altterms concept=concept prefTerm=prefTerm altTerms=altTerms roles=roles language=language sourceLanguage=sourceLanguage targetLanguage=targetLanguage translationDisabled=translationDisabled displaySuggestions=showSuggestions showQuest=showQuest
+    showSource=showSource}} {{translate-hiddenterms concept=concept hiddenTerms=hiddenTerms roles=roles language=language sourceLanguage=sourceLanguage targetLanguage=targetLanguage translationDisabled=translationDisabled displaySuggestions=showSuggestions
+    showQuest=showQuest showSource=showSource}}
 
     {{#unless emptyGenderBox}}
       <div class="block">
