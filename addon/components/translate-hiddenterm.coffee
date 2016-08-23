@@ -21,9 +21,9 @@ TranslateHiddentermComponent = Ember.Component.extend KeyboardShortcuts, Transla
   placeholder: "e.g., \"actress\" and confirm with ENTER"
   pathToQuest: Ember.computed 'term.literalForm', ->
     term = @get('term')
+    target = @get('targetLanguage')
+    source = "en"
     if term.get('literalForm')
-      target = @get('targetLanguage')
-      source = "en"
       text = term.get('literalForm')
       return @createQuestUrl(text, source, target)
     return @createQuestUrl("", source, target)

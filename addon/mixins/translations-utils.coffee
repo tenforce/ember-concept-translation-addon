@@ -32,9 +32,9 @@ TranslationsUtilsMixin = Ember.Mixin.create
 
   createQuestUrl: (text, source, target) ->
     text = escape(text)
-    source = escape(source)
-    target = escape(target)
-    return "https://webgate.ec.testa.eu/questmetasearch/search.php?text=#{text}&source=#{source}&target=#{target}&ui=addin"
+    source = escape(source).toUpperCase()
+    target = escape(target).toUpperCase()
+    return "https://webgate.ec.testa.eu/questmetasearch/search.php?searchedText=#{text}&selectedSourceLang=#{source}&selectedDestLang=#{target}"
 
   actions:
     focusTerm: (bool) ->
