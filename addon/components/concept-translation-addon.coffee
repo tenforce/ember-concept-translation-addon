@@ -27,6 +27,7 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
   userTasks: Ember.inject.service()
   user: Ember.computed.alias 'currentUser.user'
   classNames: [""]
+
   statusOptions: ["to do", "in progress", "translated", "reviewed without comments", "reviewed with comments", "confirmed"]
   translationDisabled: Ember.computed 'status', ->
     ["none", "confirmed", "reviewed"].contains @get('status')
@@ -37,6 +38,7 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
   loading: true
   init: ->
     @_super(arguments)
+    if @get('defaultClasses') then @set 'classNames',["concept-translation"] else @set 'classNames',[""]
     @ensureTermsAreCorrect()
   uglyObserver: Ember.observer 'concept.id', 'language', ->
     return unless @get('concept') and @get('language')
