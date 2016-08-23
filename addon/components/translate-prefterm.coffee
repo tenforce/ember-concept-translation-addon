@@ -20,14 +20,20 @@ TranslatePreftermComponent = Ember.Component.extend KeyboardShortcuts, Translati
       scoped: true
       preventDefault: true
 
+  showQuestIfNotEmpty: false
+
   pathToQuest: Ember.computed 'term.literalForm', ->
     term = @get('term')
     target = @get('targetLanguage')
     source = "en"
     if term.get('literalForm')
       text = term.get('literalForm')
+      @set 'showQuestIfNotEmpty', true
       return @createQuestUrl(text, source, target)
-    return @createQuestUrl("", source, target)
+    else
+      @set 'showQuestIfNotEmpty', false
+      return ""
+
   managePrefTermSaving: (term, save) ->
     promises = []
     termRoles = @parseRolesFromString(term)

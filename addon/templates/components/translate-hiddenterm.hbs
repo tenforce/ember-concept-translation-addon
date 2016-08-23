@@ -1,14 +1,15 @@
 <div class="term{{if shouldHighlight " focus"}}">
   {{#if showSource}}
-    <div class="source"> {{show-source term=term saveSource="saveSource" buttonId=(concat "hiddenSources" index) displaySource=displaySource
-    disabled=translationDisabled}}
+    <div class="source"> {{show-source term=term saveSource="saveSource" buttonId=(concat "hiddenSources" index) displaySource=displaySource disabled=translationDisabled}}
     </div>
   {{/if}}
   <div class="input-box">
     <input disabled= {{translationDisabled}} type="text" value= {{term.literalForm}} onkeyup= {{action "hiddenTermContentModified" term}} onchange= {{action "changeTermValue" term value=target.value}} class="tabbable hidden" name="hidden{{index}}" onfocus= {{action "focusTerm" true}}
         onblur= {{action "focusTerm" false}} placeholder= {{placeholder}} />
     {{#if showQuest}}
-      <button class="quest-btn" {{action 'goToQuestUrl'}} title='Link to Quest' tabindex=-1></button>
+      {{#if showQuestIfNotEmpty}}
+        <button class="quest-btn" {{action 'goToQuestUrl'}} title='Link to Quest' tabindex=-1></button>
+      {{/if}}
     {{/if}}
   </div>
   {{#if allowDelete}}

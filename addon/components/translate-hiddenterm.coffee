@@ -19,14 +19,19 @@ TranslateHiddentermComponent = Ember.Component.extend KeyboardShortcuts, Transla
       scoped: true
       preventDefault: true
   placeholder: "e.g., \"actress\" and confirm with ENTER"
+  showQuestIfNotEmpty: false
+
   pathToQuest: Ember.computed 'term.literalForm', ->
     term = @get('term')
     target = @get('targetLanguage')
     source = "en"
     if term.get('literalForm')
       text = term.get('literalForm')
+      @set 'showQuestIfNotEmpty', true
       return @createQuestUrl(text, source, target)
-    return @createQuestUrl("", source, target)
+    else
+      @set 'showQuestIfNotEmpty', false
+      return ""
 
   actions:
     goToQuestUrl: ->

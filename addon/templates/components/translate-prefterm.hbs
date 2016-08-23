@@ -14,7 +14,9 @@
         <input disabled= {{translationDisabled}} type="text" value= {{prefTerm.literalForm}} class="tabbable pref" name="pref0" onkeyup= {{action "prefTermContentModified" prefTerm}} onchange= {{action "changeTermValue" prefTerm value=target.value}} onfocus= {{action "focusTerm" true}}
             onblur= {{action "focusTerm" false}} placeholder= {{placeholder}} />
         {{#if showQuest}}
-          <button class="quest-btn" {{action 'goToQuestUrl'}} title='Link to Quest' tabindex=-1></button>
+          {{#if showQuestIfNotEmpty}}
+            <button class="quest-btn" {{action 'goToQuestUrl'}} title='Link to Quest' tabindex=-1></button>
+          {{/if}}
         {{/if}}
       </div>
       {{#if prefTerm.id}}
