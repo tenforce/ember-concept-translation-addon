@@ -20,7 +20,9 @@ TranslatePreftermComponent = Ember.Component.extend KeyboardShortcuts, Translati
       scoped: true
       preventDefault: true
 
-  showQuestIfNotEmpty: false
+
+  showQuestIfNotEmpty: Ember.computed 'term.literalForm', ->
+    if @get('term.literalForm') then return true else return false
 
   pathToQuest: Ember.computed 'term.literalForm', ->
     term = @get('term')
@@ -28,10 +30,8 @@ TranslatePreftermComponent = Ember.Component.extend KeyboardShortcuts, Translati
     source = "en"
     if term.get('literalForm')
       text = term.get('literalForm')
-      @set 'showQuestIfNotEmpty', true
       return @createQuestUrl(text, source, target)
     else
-      @set 'showQuestIfNotEmpty', false
       return ""
 
   managePrefTermSaving: (term, save) ->
@@ -50,7 +50,9 @@ TranslatePreftermComponent = Ember.Component.extend KeyboardShortcuts, Translati
   actions:
     goToQuestUrl: ->
       if @get 'showQuest'
-        window.open(@get('pathToQuest'))
+        url = @get('pathToQuest')
+        if @get 'showQuestIfNotEmpty'
+          window.open(url)
     prefTermContentModified: (term, event) ->
       if(event.keyCode == 13 && not event.shiftKey)
         @managePrefTermSaving(term, true)

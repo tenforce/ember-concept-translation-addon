@@ -19,7 +19,6 @@ TranslateHiddentermComponent = Ember.Component.extend KeyboardShortcuts, Transla
       scoped: true
       preventDefault: true
   placeholder: "e.g., \"actress\" and confirm with ENTER"
-  showQuestIfNotEmpty: false
 
   pathToQuest: Ember.computed 'term.literalForm', ->
     term = @get('term')
@@ -27,24 +26,27 @@ TranslateHiddentermComponent = Ember.Component.extend KeyboardShortcuts, Transla
     source = "en"
     if term.get('literalForm')
       text = term.get('literalForm')
-      @set 'showQuestIfNotEmpty', true
       return @createQuestUrl(text, source, target)
     else
-      @set 'showQuestIfNotEmpty', false
       return ""
 
+  showQuestIfNotEmpty: Ember.computed 'term.literalForm', ->
+    if @get('term.literalForm') then return true else return false
   actions:
     goToQuestUrl: ->
       if @get 'showQuest'
-        window.open(@get('pathToQuest'))
+        url = @get('pathToQuest')
+        if @get 'showQuestIfNotEmpty'
+          window.open(url)
     hiddenTermContentModified: (term, event) ->
       if(event.keyCode == 13 && not event.shiftKey)
         @changeTermValue(term, event, true)
         @sendAction('saveHiddenTerm', term)
       else
         @changeTermValue(term, event, false)
+
     removeHiddenTerm: (term, index) ->
-       @sendAction('removeHiddenTerm', term, index)
+      @sendAction('removeHiddenTerm', term, index)
     deleteTerm: ->
       term = @get('term')
       if term.get('literalForm')

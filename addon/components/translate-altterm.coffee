@@ -6,7 +6,7 @@
 `import SourceManager from '../mixins/source-manager'`
 `import TermManager from '../mixins/term-manager'`
 
-TranslateAlttermComponent =  Ember.Component.extend KeyboardShortcuts, TranslationsUtils, SuggestionsManager, SourceManager, TermManager,
+TranslateAlttermComponent = Ember.Component.extend KeyboardShortcuts, TranslationsUtils, SuggestionsManager, SourceManager, TermManager,
   layout: layout
   keyboardShortcuts:
     'ctrl+alt+q':
@@ -20,25 +20,25 @@ TranslateAlttermComponent =  Ember.Component.extend KeyboardShortcuts, Translati
       scoped: true
       preventDefault: true
 
-  showQuestIfNotEmpty: false
-
-
   pathToQuest: Ember.computed 'term.literalForm', ->
     term = @get('term')
     target = @get('targetLanguage')
     source = "en"
     if term.get('literalForm')
       text = term.get('literalForm')
-      @set 'showQuestIfNotEmpty', true
       return @createQuestUrl(text, source, target)
     else
-      @set 'showQuestIfNotEmpty', false
       return ""
+
+  showQuestIfNotEmpty: Ember.computed 'term.literalForm', ->
+    if @get('term.literalForm') then return true else return false
 
   actions:
     goToQuestUrl: ->
       if @get 'showQuest'
-        window.open(@get('pathToQuest'))
+        url = @get('pathToQuest')
+        if @get 'showQuestIfNotEmpty'
+          window.open(url)
 
     altTermContentModified: (term, event) ->
       if(event.keyCode == 13 && not event.shiftKey)
@@ -46,6 +46,8 @@ TranslateAlttermComponent =  Ember.Component.extend KeyboardShortcuts, Translati
         @sendAction('saveAltTerm', term)
       else
         @changeTermValue(term, event, false)
+
+
     removeAltTerm: (term, index) ->
       @sendAction('removeAltTerm', term, index)
     deleteTerm: ->
