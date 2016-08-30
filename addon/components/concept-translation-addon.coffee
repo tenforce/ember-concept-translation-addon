@@ -29,8 +29,12 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
   classNames: [""]
 
   statusOptions: ["to do", "in progress", "translated", "reviewed without comments", "reviewed with comments", "confirmed"]
-  translationDisabled: Ember.computed 'status', ->
-    ["none", "confirmed", "reviewed"].contains @get('status')
+  translationDisabled: Ember.computed 'status', 'disableTranslation', ->
+    if @get 'disableTranslation'
+      return true
+    else
+      ["none", "confirmed", "reviewed"].contains @get('status')
+  disableTranslation: false
   language: Ember.computed 'concept', 'currentUser.user.language', ->
     @get('currentUser.user.language')
   sourceLanguage: "en"
@@ -176,6 +180,11 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
         @$('.tabbable[name=hiddennew]')[0]?.focus()
 
     setLanguage: (lang) ->
+      unless @get 'currentUser.userIsAdmin'
+        if lang.id != @get('currentUser.user.language')
+          @set 'disableTranslation', true
+        else
+          @set 'disableTranslation', false
       @set 'language', lang.id
     setStatus: (status) ->
       @setStatus(status)
