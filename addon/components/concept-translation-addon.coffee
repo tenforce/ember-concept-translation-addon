@@ -180,11 +180,11 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
         @$('.tabbable[name=hiddennew]')[0]?.focus()
 
     setLanguage: (lang) ->
-      unless @get 'currentUser.userIsAdmin'
-        if lang.id != @get('currentUser.user.language')
-          @set 'disableTranslation', true
-        else
-          @set 'disableTranslation', false
+      # unless @get 'currentUser.userIsAdmin'
+      if lang.id != @get('currentUser.user.language')
+        @set 'disableTranslation', true
+      else
+        @set 'disableTranslation', false
       @set 'language', lang.id
     setStatus: (status) ->
       @setStatus(status)
