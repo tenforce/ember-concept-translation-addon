@@ -100,11 +100,34 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
         role = roles.findBy('preflabel', 'neutral')
         term.setGender(role, true)
       @set 'prefTerm', term
-
-  statusSelectorTitle: Ember.computed 'allowStatusChange', ->
-    if @get('allowStatusChange') then 'change the status of this concept'
-    else 'you need to set a gender for all alternative labels'
-  allowStatusChange: Ember.computed "altTerms.@each.genders", ->
+  statusSelectorTitle: Ember.computed 'allowStatusChange', 'hasOneOfEachGender', 'altTermsHaveGender', ->
+    buffer=""
+    if @get('allowStatusChange') then buffer += 'Change the status of this concept'
+    else
+      if not @get('hasOneOfEachGender') then buffer += "You need one standard male, one standard female and at least one neutral genders\n"
+      if not @get('altTermsHaveGender') then buffer += "You need to set a gender for all alternative labels\n"
+    buffer
+  allowStatusChange: Ember.computed "altTermsHaveGender", "hasOneOfEachGender", ->
+    @get('altTermsHaveGender') and @get('hasOneOfEachGender')
+  hasOneOfEachGender: Ember.computed 'prefTerm.genders', "altTerms.@each.genders", ->
+    smale=false
+    sfemale=false
+    neutral=false
+    prefgenders = @get('prefTerm.genders')
+    if prefgenders.contains('standard female term') then sfemale = true
+    if prefgenders.contains('standard male term') then smale = true
+    if prefgenders.contains('neutral') then neutral = true
+    if sfemale and smale and neutral then return true
+    valid = false
+    altTerms = @get('altTerms')
+    altTerms.forEach (alterm) ->
+      altgenders = alterm.get('genders')
+      if altgenders.contains('standard female term') then sfemale = true
+      if altgenders.contains('standard male term') then smale = true
+      if altgenders.contains('neutral') then neutral = true
+      if sfemale and smale and neutral then valid = true
+    return valid
+  altTermsHaveGender: Ember.computed "altTerms.@each.genders", ->
     @checkAltTermsHaveGender()
   checkAltTermsHaveGender: ->
     valid = true
