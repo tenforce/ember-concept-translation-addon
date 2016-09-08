@@ -28,6 +28,7 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
   user: Ember.computed.alias 'currentUser.user'
   classNames: [""]
 
+  showGendersBox: true
   statusOptions: ["to do", "in progress", "translated", "reviewed without comments", "reviewed with comments", "confirmed"]
   translationDisabled: Ember.computed 'status', 'disableTranslation', ->
     if @get 'disableTranslation'

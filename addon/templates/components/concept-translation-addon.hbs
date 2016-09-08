@@ -34,11 +34,13 @@
       showQuest=showQuest showSource=showSource showPlus=showPlus}} {{translate-altterms concept=concept prefTerm=prefTerm altTerms=altTerms roles=roles language=language sourceLanguage=sourceLanguage targetLanguage=targetLanguage translationDisabled=translationDisabled
       displaySuggestions=showSuggestions showQuest=showQuest showSource=showSource showPlus=showPlus}} {{translate-hiddenterms concept=concept hiddenTerms=hiddenTerms roles=roles language=language sourceLanguage=sourceLanguage targetLanguage=targetLanguage
       translationDisabled=translationDisabled displaySuggestions=showSuggestions showQuest=showQuest showSource=showSource showPlus=showPlus}}
-      {{#unless emptyGenderBox}}
-        <div class="block">
-          {{visual-gender-box altTerms=altTerms prefTerm=prefTerm}}
-        </div>
-      {{/unless}}
+      {{#if showGendersBox}}
+        {{#unless emptyGenderBox}}
+          <div class="block">
+            {{visual-gender-box altTerms=altTerms prefTerm=prefTerm}}
+          </div>
+        {{/unless}}
+      {{/if}}
     {{/if}}
   </div>
 {{/if}}
