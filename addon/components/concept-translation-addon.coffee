@@ -108,7 +108,8 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
       if not @get('hasOneOfEachGender') then buffer += "You need one standard male, one standard female and at least one neutral genders\n"
       if not @get('altTermsHaveGender') then buffer += "You need to set a gender for all alternative labels\n"
     buffer
-  allowStatusChange: Ember.computed "altTermsHaveGender", "hasOneOfEachGender", ->
+  allowStatusChange: Ember.computed "currentUser.userIsAdmin", "altTermsHaveGender", "hasOneOfEachGender", ->
+    if @get('currentUser.userIsAdmin') then return true
     @get('altTermsHaveGender') and @get('hasOneOfEachGender')
   hasOneOfEachGender: Ember.computed 'prefTerm.genders', "altTerms.@each.genders", ->
     smale=false
