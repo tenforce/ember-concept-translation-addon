@@ -29,7 +29,29 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
   classNames: [""]
 
   showGendersBox: true
-  statusOptions: ["to do", "in progress", "translated", "reviewed without comments", "reviewed with comments", "confirmed"]
+
+  chosenStatus: Ember.computed 'status', ->
+    {
+      name: @get 'status'
+    }
+  statusOptionsEnabled: [
+    {name: "to do"},
+    {name: "in progress"},
+    {name: "translated"},
+    {name: "reviewed without comments"},
+    {name: "reviewed with comments"},
+    {name: "confirmed"}
+  ]
+
+  statusOptionsDisabled: [
+    {name: "to do"},
+    {name: "in progress"},
+    {name: "translated", disabled: true},
+    {name: "reviewed without comments", disabled: true},
+    {name: "reviewed with comments", disabled: true},
+    {name: "confirmed", disabled: true}
+  ]
+
   translationDisabled: Ember.computed 'status', 'disableTranslation', ->
     if @get 'disableTranslation'
       return true
@@ -109,8 +131,15 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
       if not @get('altTermsHaveGender') then buffer += "You need to set a gender for all alternative labels\n"
     buffer
   allowStatusChange: Ember.computed "currentUser.userIsAdmin", "altTermsHaveGender", "hasOneOfEachGender", ->
-    if @get('currentUser.userIsAdmin') then return true
-    @get('altTermsHaveGender') and @get('hasOneOfEachGender')
+    if @get('currentUser.userIsAdmin')
+      @set 'statusOptions', @get 'statusOptionsEnabled'
+      return true
+    allowChange =( @get('altTermsHaveGender') and @get('hasOneOfEachGender'))
+    if allowChange
+      @set 'statusOptions', @get 'statusOptionsEnabled'
+    else
+      @set 'statusOptions', @get 'statusOptionsDisabled'
+    return allowChange
   hasOneOfEachGender: Ember.computed 'prefTerm.genders', "altTerms.@each.genders", ->
     smale=false
     sfemale=false
@@ -139,7 +168,14 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
         valid = false
     valid
   setStatus: (status) ->
-    if @get 'allowStatusChange'
+    checkGenderStatuses = ["translated", "reviewed without comments", "reviewed with comments", "confirmed"]
+    changeStatus = false
+    if (status in checkGenderStatuses)
+      changeStatus = @get('allowStatusChange')
+    else
+      changeStatus = true
+
+    if changeStatus
       task = @get('tasks').findBy('language', @get('language'))
       task.set('status', status)
       task.save().then =>
@@ -212,7 +248,7 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
           @set 'disableTranslation', false
       @set 'language', lang.id
     setStatus: (status) ->
-      @setStatus(status)
+      @setStatus(status['name'])
     saveDescription: (description) ->
       if @get('concept.description')
         descObj = @get('concept.description').findBy('language', @get('language'))
