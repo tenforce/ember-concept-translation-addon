@@ -129,23 +129,16 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
         role = roles.findBy('preflabel', 'neutral')
         term.setGender(role, true)
       @set 'prefTerm', term
-  statusSelectorTitle: Ember.computed 'allowStatusChange', 'hasOneOfEachGender', 'altTermsHaveGender', ->
-    buffer=""
-    if @get('allowStatusChange') then buffer += 'Change the status of this concept'
-    else
-      if not @get('hasOneOfEachGender') then buffer += "You need one standard male, one standard female and at least one neutral genders\n"
-      if not @get('altTermsHaveGender') then buffer += "You need to set a gender for all alternative labels\n"
-    buffer
-  allowStatusChange: Ember.computed "currentUser.userIsAdmin", "altTermsHaveGender", "hasOneOfEachGender", ->
+  statusSelectorTitle: 'Change the status of this concept. \nYou need one standard male, one standard female and at least one neutral genders. You need to set a gender for all alternative labels'
+  allowStatusChange: Ember.computed.not 'task.language'
+  statusOptions: Ember.computed 'currentUser.userIsAdmin', 'altTermsHaveGender', 'hasOneOfEachGender', ->
     if @get('currentUser.userIsAdmin')
-      @set 'statusOptions', @get 'statusOptionsEnabled'
-      return true
+      @get 'statusOptionsEnabled'
     allowChange =( @get('altTermsHaveGender') and @get('hasOneOfEachGender'))
     if allowChange
-      @set 'statusOptions', @get 'statusOptionsEnabled'
+      @get 'statusOptionsEnabled'
     else
-      @set 'statusOptions', @get 'statusOptionsDisabled'
-    return allowChange
+      @get 'statusOptionsDisabled'
   hasOneOfEachGender: Ember.computed 'prefTerm.genders', "altTerms.@each.genders", ->
     smale=false
     sfemale=false
@@ -174,21 +167,12 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
         valid = false
     valid
   setStatus: (status) ->
-    checkGenderStatuses = ["translated", "reviewed without comments", "reviewed with comments", "confirmed"]
-    changeStatus = false
-    if (status in checkGenderStatuses)
-      changeStatus = @get('allowStatusChange')
-    else
-      changeStatus = true
-
-    if changeStatus
-      task = @get('tasks').findBy('language', @get('language'))
-      task.set('status', status)
-      task.save().then =>
-        @get('userTasks').decrementProperty(@get('status').replace(`/ /g, ''`)) # decrement old status
-        @get('userTasks').incrementProperty(status.replace(`/ /g, ''`)) #increment new status
-        @set 'status', status
-    else console.log "status change not allowed"
+    task = @get('tasks').findBy('language', @get('language'))
+    task.set('status', status)
+    task.save().then =>
+      @get('userTasks').decrementProperty(@get('status').replace(`/ /g, ''`)) # decrement old status
+      @get('userTasks').incrementProperty(status.replace(`/ /g, ''`)) #increment new status
+      @set 'status', status
 
   emptyGenderBox: Ember.computed 'loading', 'emptyPrefTerm', 'emptyAltTerms', ->
     unless @get('loading')
