@@ -22,7 +22,7 @@
       {{/if}}
       {{#if showStatusSelector}}
         <div class="translation-status" title= {{statusSelectorTitle}}>
-          {{#power-select tabindex=-1 options=statusOptions searchField='name' selected=chosenStatus onchange=(action "setStatus") as |state|}}
+          {{#power-select tabindex=-1 disabled=(not allowStatusChange) options=statusOptions searchField='name' selected=chosenStatus onchange=(action "setStatus") as |state|}}
           {{!-- {{#power-select tabindex=-1 disabled=(not allowStatusChange) options=statusOptions selected=status onchange=(action "setStatus") as |state|}} --}}
             <span class="status-{{state}}">{{state.name}}</span>
           {{/power-select}}

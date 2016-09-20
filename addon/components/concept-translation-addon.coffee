@@ -52,6 +52,8 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
     {name: "confirmed", disabled: true}
   ]
 
+  disableStatusSelector: false
+
   translationDisabled: Ember.computed 'status', 'disableTranslation', ->
     if @get 'disableTranslation'
       return true
@@ -102,7 +104,11 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
     @get('store').query('task', 'filter[concept][id]': @get('concept').get('id')).then (tasks) =>
       unless @get('isDestroyed')
         @set 'tasks', tasks
-        @set 'status', @get('tasks').findBy('language', @get('language'))?.get('status') || "none"
+        fetchStatus = @get('tasks').findBy('language', @get('language'))?.get('status')
+        if fetchStatus
+          @set 'status', fetchStatus || "none"
+        else
+          disableStatusSelector = true
   _ensurePrefLabels: ->
     concept = @get 'concept'
     unless @get('roles')
