@@ -25,13 +25,13 @@ TermManagerMixin = Ember.Mixin.create
       prefTerm.setGender(role, false).then ->
         prefTerm.save()
 
-  setAsPreferred: (term, save, gender) ->
+  setAsPreferred: (term, save, gender, preferred) ->
     return unless term
     promises = []
-    g = @get('roles').findBy('preflabel', gender)
+    unless preferred then g = @get('roles').findBy('preflabel', gender)
     sg = @get('roles').findBy('preflabel', "standard #{gender} term")
     @removeRoleFromTerms(sg)
-    promises.push(term.setGender(g, true))
+    unless preferred then promises.push(term.setGender(g, true))
     promises.push(term.setGender(sg, true))
     Ember.RSVP.Promise.all(promises).then ->
       if save then term.save()

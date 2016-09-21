@@ -32,8 +32,8 @@ TranslateAlttermsComponent = Ember.Component.extend TranslationsUtils, SourceSav
       term.set('roles', [])
     termRoles.forEach (role) =>
       if ["standard female term", "standard male term"].contains role
-        if role is "standard female term" then promises.push(@setAsPreferred(term, false, "female"))
-        else if role is "standard male term" then promises.push(@setAsPreferred(term, false, "male"))
+        if role is "standard female term" then promises.push(@setAsPreferred(term, false, "female", false))
+        else if role is "standard male term" then promises.push(@setAsPreferred(term, false, "male", false))
       else if ["male", "female", "neutral"].contains role then promises.push(@setGender(term, false, role))
     Ember.RSVP.Promise.all(promises).then =>
       if save then term.save()
@@ -53,7 +53,7 @@ TranslateAlttermsComponent = Ember.Component.extend TranslationsUtils, SourceSav
           newterm = @generateAltTerm()
           @set('newTerm', newterm)
       @set('newField', false)
-      
+
     removeAltTerm: (term, index) ->
       @removeAltTerm(term, index)
     removeNewAltTerm: (term, index) ->

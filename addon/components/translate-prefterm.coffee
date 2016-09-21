@@ -42,8 +42,8 @@ TranslatePreftermComponent = Ember.Component.extend KeyboardShortcuts, Translati
       @setGender(term, false, "neutral")
     termRoles.forEach (role) =>
       if ["standard female term", "standard male term"].contains role
-        if role is "standard female term" then promises.push(@setAsPreferred(term, false, "female"))
-        else if role is "standard male term" then promises.push(@setAsPreferred(term, false, "male"))
+        if role is "standard female term" then promises.push(@setAsPreferred(term, false, "female", true))
+        else if role is "standard male term" then promises.push(@setAsPreferred(term, false, "male", true))
     Ember.RSVP.Promise.all(promises).then =>
       if save then term.save()
 
