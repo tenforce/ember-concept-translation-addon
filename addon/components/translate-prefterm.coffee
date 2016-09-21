@@ -39,7 +39,7 @@ TranslatePreftermComponent = Ember.Component.extend KeyboardShortcuts, Translati
     termRoles = @parseRolesFromString(term)
     if termRoles.length > 0
       term.set('roles', [])
-      @setGender(term, false, "neutral")
+      promises.push(@setGender(term, false, "neutral"))
     termRoles.forEach (role) =>
       if ["standard female term", "standard male term"].contains role
         if role is "standard female term" then promises.push(@setAsPreferred(term, false, "female", true))

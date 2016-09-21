@@ -14,7 +14,12 @@ TranslationsUtilsMixin = Ember.Mixin.create
     array = []
     split = literalform.split('//')
     genders = split[1]
-    unless genders then return array
+    unless genders
+      unless literalform.indexOf("//") is -1
+        term.set('literalForm', literalform.replace("//", ""))
+        term.set('literalFormValues.firstObject.content', literalform.replace("//", ""))
+        return ['']
+      return array
     unless genders.indexOf("sf") is -1 then array.push('standard female term')
     else unless genders.indexOf("f") is -1 then array.push('female')
     unless genders.indexOf('sm') is -1 then array.push('standard male term')
