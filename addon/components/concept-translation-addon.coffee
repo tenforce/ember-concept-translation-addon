@@ -29,7 +29,31 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
   classNames: [""]
 
   showGendersBox: true
-  statusOptions: ["to do", "in progress", "translated", "reviewed without comments", "reviewed with comments", "confirmed"]
+
+  chosenStatus: Ember.computed 'status', ->
+    {
+      name: @get 'status'
+    }
+  statusOptionsEnabled: [
+    {name: "to do"},
+    {name: "in progress"},
+    {name: "translated"},
+    {name: "reviewed without comments"},
+    {name: "reviewed with comments"},
+    {name: "confirmed"}
+  ]
+
+  statusOptionsDisabled: [
+    {name: "to do"},
+    {name: "in progress"},
+    {name: "translated", disabled: true},
+    {name: "reviewed without comments", disabled: true},
+    {name: "reviewed with comments", disabled: true},
+    {name: "confirmed", disabled: true}
+  ]
+
+  disableStatusSelector: false
+
   translationDisabled: Ember.computed 'status', 'disableTranslation', ->
     if @get 'disableTranslation'
       return true
@@ -80,7 +104,11 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
     @get('store').query('task', 'filter[concept][id]': @get('concept').get('id')).then (tasks) =>
       unless @get('isDestroyed')
         @set 'tasks', tasks
-        @set 'status', @get('tasks').findBy('language', @get('language'))?.get('status') || "none"
+        fetchStatus = @get('tasks').findBy('language', @get('language'))?.get('status')
+        if fetchStatus
+          @set 'status', fetchStatus || "none"
+        else
+          disableStatusSelector = true
   _ensurePrefLabels: ->
     concept = @get 'concept'
     unless @get('roles')
@@ -101,16 +129,16 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
         role = roles.findBy('preflabel', 'neutral')
         term.setGender(role, true)
       @set 'prefTerm', term
-  statusSelectorTitle: Ember.computed 'allowStatusChange', 'hasOneOfEachGender', 'altTermsHaveGender', ->
-    buffer=""
-    if @get('allowStatusChange') then buffer += 'Change the status of this concept'
+  statusSelectorTitle: 'Change the status of this concept. \nYou need one standard male, one standard female and at least one neutral genders. You need to set a gender for all alternative labels'
+  allowStatusChange: Ember.computed.not 'task.language'
+  statusOptions: Ember.computed 'currentUser.userIsAdmin', 'altTermsHaveGender', 'hasOneOfEachGender', ->
+    if @get('currentUser.userIsAdmin')
+      @get 'statusOptionsEnabled'
+    allowChange =( @get('altTermsHaveGender') and @get('hasOneOfEachGender'))
+    if allowChange
+      @get 'statusOptionsEnabled'
     else
-      if not @get('hasOneOfEachGender') then buffer += "You need one standard male, one standard female and at least one neutral genders\n"
-      if not @get('altTermsHaveGender') then buffer += "You need to set a gender for all alternative labels\n"
-    buffer
-  allowStatusChange: Ember.computed "currentUser.userIsAdmin", "altTermsHaveGender", "hasOneOfEachGender", ->
-    if @get('currentUser.userIsAdmin') then return true
-    @get('altTermsHaveGender') and @get('hasOneOfEachGender')
+      @get 'statusOptionsDisabled'
   hasOneOfEachGender: Ember.computed 'prefTerm.genders', "altTerms.@each.genders", ->
     smale=false
     sfemale=false
@@ -139,14 +167,12 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
         valid = false
     valid
   setStatus: (status) ->
-    if @get 'allowStatusChange'
-      task = @get('tasks').findBy('language', @get('language'))
-      task.set('status', status)
-      task.save().then =>
-        @get('userTasks').decrementProperty(@get('status').replace(`/ /g, ''`)) # decrement old status
-        @get('userTasks').incrementProperty(status.replace(`/ /g, ''`)) #increment new status
-        @set 'status', status
-    else console.log "status change not allowed"
+    task = @get('tasks').findBy('language', @get('language'))
+    task.set('status', status)
+    task.save().then =>
+      @get('userTasks').decrementProperty(@get('status').replace(`/ /g, ''`)) # decrement old status
+      @get('userTasks').incrementProperty(status.replace(`/ /g, ''`)) #increment new status
+      @set 'status', status
 
   emptyGenderBox: Ember.computed 'loading', 'emptyPrefTerm', 'emptyAltTerms', ->
     unless @get('loading')
@@ -212,7 +238,7 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
           @set 'disableTranslation', false
       @set 'language', lang.id
     setStatus: (status) ->
-      @setStatus(status)
+      @setStatus(status['name'])
     saveDescription: (description) ->
       if @get('concept.description')
         descObj = @get('concept.description').findBy('language', @get('language'))

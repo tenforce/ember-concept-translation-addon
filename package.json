@@ -1,6 +1,6 @@
 {
   "name": "concept-translation-addon",
-  "version": "0.4.8",
+  "version": "0.5.2",
   "description": "The default blueprint for ember-cli addons.",
   "directories": {
     "doc": "doc",
