@@ -6,21 +6,26 @@
 
 ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, TranslationsUtils, TermManager,
   layout: layout
-  keyboardShortcuts:
-    # <- statusses #
-    'ctrl+alt+1': 'ctrlalt1'
-    'ctrl+alt+2': 'ctrlalt2'
-    'ctrl+alt+3': 'ctrlalt3'
-    'ctrl+alt+4': 'ctrlalt4'
-    'ctrl+alt+5': 'ctrlalt5'
-    'ctrl+alt+6': 'ctrlalt6'
-    # -> #
-    # focus pref term #
-    'ctrl+alt+p': 'ctrlaltp'
-    # focus new alt term #
-    'ctrl+alt+a': 'ctrlalta'
-    # focus new hidden term #
-    'ctrl+alt+h': 'ctrlalth'
+  keyboardShortcuts: Ember.computed 'disableShortcuts', ->
+    if @get('disableShortcuts') then return {}
+    else
+      {
+        # <- statusses #
+        'ctrl+alt+1': 'ctrlalt1'
+        'ctrl+alt+2': 'ctrlalt2'
+        'ctrl+alt+3': 'ctrlalt3'
+        'ctrl+alt+4': 'ctrlalt4'
+        'ctrl+alt+5': 'ctrlalt5'
+        'ctrl+alt+6': 'ctrlalt6'
+        # -> #
+        # focus pref term #
+        'ctrl+alt+p': 'ctrlaltp'
+        # focus new alt term #
+        'ctrl+alt+a': 'ctrlalta'
+        # focus new hidden term #
+        'ctrl+alt+h': 'ctrlalth'
+      }
+
 
   store: Ember.inject.service('store')
   currentUser: Ember.inject.service()

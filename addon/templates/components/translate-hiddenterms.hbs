@@ -6,13 +6,13 @@
   <div class="block-content">
     {{#each hiddenTerms as |term index|}}
       {{translate-hiddenterm term=term concept=concept roles=roles allowDelete=true index=index sourceLanguage=sourceLanguage targetLanguage=targetLanguage translationDisabled=translationDisabled saveHiddenTerm="saveHiddenTerm" removeHiddenTerm="removeHiddenTerm"
-      saveSource="saveSource" displaySuggestions=false showQuest=showQuest showSource=showSource}}
+      saveSource="saveSource" displaySuggestions=false showQuest=showQuest showSource=showSource disableShortcuts=disableShortcuts}}
     {{/each}}
 
     {{#if showPlus}}
       {{#if newField}}
         {{translate-hiddenterm term=newTerm concept=concept roles=roles allowDelete=false index="new" sourceLanguage=sourceLanguage targetLanguage=targetLanguage translationDisabled=translationDisabled saveHiddenTerm="saveNewHiddenTerm" removeHiddenTerm="removeNewHiddenTerm"
-        saveSource="saveNewSource" displaySuggestions=displaySuggestions showQuest=showQuest showSource=showSource}}
+        saveSource="saveNewSource" displaySuggestions=displaySuggestions showQuest=showQuest showSource=showSource disableShortcuts=disableShortcuts}}
 
       {{/if}}
       <div class='action'>
@@ -20,7 +20,7 @@
     </div>
     {{else}}
       {{translate-hiddenterm term=newTerm concept=concept roles=roles allowDelete=false index="new" sourceLanguage=sourceLanguage targetLanguage=targetLanguage translationDisabled=translationDisabled saveHiddenTerm="saveNewHiddenTerm" removeHiddenTerm="removeNewHiddenTerm"
-      saveSource="saveNewSource" displaySuggestions=displaySuggestions showQuest=showQuest showSource=showSource}}
+      saveSource="saveNewSource" displaySuggestions=displaySuggestions showQuest=showQuest showSource=showSource disableShortcuts=disableShortcuts}}
     {{/if}}
   </div>
 </div>

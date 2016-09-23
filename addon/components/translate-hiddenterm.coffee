@@ -7,17 +7,21 @@
 
 TranslateHiddentermComponent = Ember.Component.extend KeyboardShortcuts, TranslationsUtils, SuggestionsManager, SourceManager,
   layout: layout
-  keyboardShortcuts:
-    'ctrl+alt+q':
-      action: 'goToQuestUrl'
-      scoped: true
-    'ctrl+alt+d':
-      action: 'deleteTerm'
-      scoped: true
-    'ctrl+alt+o':
-      action: 'toggleSource'
-      scoped: true
-      preventDefault: true
+  keyboardShortcuts: Ember.computed 'disableShortcuts', ->
+    if @get('disableShortcuts') then return {}
+    else
+      {
+        'ctrl+alt+q':
+          action: 'goToQuestUrl'
+          scoped: true
+        'ctrl+alt+d':
+          action: 'deleteTerm'
+          scoped: true
+        'ctrl+alt+o':
+          action: 'toggleSource'
+          scoped: true
+          preventDefault: true
+      }
   placeholder: "e.g., \"actress\" and confirm with ENTER"
 
   pathToQuest: Ember.computed 'term.literalForm', ->

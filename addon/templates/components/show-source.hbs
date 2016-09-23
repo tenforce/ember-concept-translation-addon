@@ -4,7 +4,7 @@
     {{#if displaySource}}
       {{#tether-dialog close='closeSource' hasOverlay=false clickOutsideToClose=true  target=sButtonId
       targetAttachment='bottom left' attachment='top left' container-class='term-source'}}
-          {{translation-source source=source closeSource="closeSource" disabled=disabled}}
+          {{translation-source source=source closeSource="closeSource" disabled=disabled disableShortcuts=disableShortcuts}}
       {{/tether-dialog}}
     {{/if}}
   {{/if}}
