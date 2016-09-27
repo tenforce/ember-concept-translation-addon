@@ -144,8 +144,13 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
   allowStatusChange: Ember.computed.not 'task.language'
   statusOptions: Ember.computed 'currentUser.userIsAdmin', 'altTermsHaveGender', 'hasOneOfEachGender', ->
     if @get('currentUser.userIsAdmin')
-      return true
-    return  @get('altTermsHaveGender') and @get('hasOneOfEachGender')
+      @get 'statusOptionsEnabled'
+    else
+      allowChange =( @get('altTermsHaveGender') and @get('hasOneOfEachGender'))
+      if allowChange
+        @get 'statusOptionsEnabled'
+      else
+        @get 'statusOptionsDisabled'
   hasOneOfEachGender: Ember.computed 'prefTerm.genders', "altTerms.@each.genders", ->
     smale=false
     sfemale=false
