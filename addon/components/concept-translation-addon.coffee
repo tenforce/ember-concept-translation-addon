@@ -34,6 +34,12 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
     {
       name: @get 'status'
     }
+
+  statusOptions: Ember.computed 'allowStatusChange', ->
+    if @get('allowStatusChange')
+      return @get('statusOptionsEnabled')
+    return @get('statusOptionsDisabled')
+
   statusOptionsEnabled: [
     {name: "to do"},
     {name: "in progress"},
@@ -138,14 +144,8 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
     buffer
   allowStatusChange: Ember.computed "currentUser.userIsAdmin", "altTermsHaveGender", "hasOneOfEachGender", ->
     if @get('currentUser.userIsAdmin')
-      @set 'statusOptions', @get 'statusOptionsEnabled'
       return true
-    allowChange =( @get('altTermsHaveGender') and @get('hasOneOfEachGender'))
-    if allowChange
-      @set 'statusOptions', @get 'statusOptionsEnabled'
-    else
-      @set 'statusOptions', @get 'statusOptionsDisabled'
-    return allowChange
+    return  @get('altTermsHaveGender') and @get('hasOneOfEachGender')
   hasOneOfEachGender: Ember.computed 'prefTerm.genders', "altTerms.@each.genders", ->
     smale=false
     sfemale=false
