@@ -140,7 +140,12 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
         role = roles.findBy('preflabel', 'neutral')
         term.setGender(role, true)
       @set 'prefTerm', term
-  statusSelectorTitle: 'Change the status of this concept. \nYou need one standard male, one standard female and at least one neutral genders. You need to set a gender for all alternative labels'
+  statusSelectorTitle: Ember.computed 'allowStatusChange', 'hasOneOfEachGender', 'altTermsHaveGender', ->
+    buffer=""
+    if not @get('hasOneOfEachGender') then buffer += "You need one standard male, one standard female and at least one neutral genders.\n\n"
+    if not @get('altTermsHaveGender') then buffer += "You need to set a gender for all alternative labels.\n\n"
+    unless buffer then buffer += 'Change the status of this concept.'
+    buffer
   allowStatusChange: Ember.computed.not 'task.language'
   statusOptions: Ember.computed 'currentUser.userIsAdmin', 'altTermsHaveGender', 'hasOneOfEachGender', ->
     if @get('currentUser.userIsAdmin')
