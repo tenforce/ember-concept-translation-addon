@@ -115,7 +115,9 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
     @get('store').query('task', 'filter[concept][id]': @get('concept').get('id')).then (tasks) =>
       unless @get('isDestroyed')
         @set 'tasks', tasks
-        fetchStatus = @get('tasks').findBy('language', @get('language'))?.get('status')
+        task = @get('tasks').findBy('language', @get('language'))
+        @set 'task', task
+        fetchStatus = task?.get('status')
         if fetchStatus
           @set 'status', fetchStatus || "none"
         else
