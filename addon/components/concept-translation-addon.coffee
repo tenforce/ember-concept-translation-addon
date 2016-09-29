@@ -69,7 +69,7 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
     if @get 'disableTranslation'
       return true
     else
-      ["none", "confirmed", "reviewed"].contains @get('status')
+      ["none", "confirmed", "reviewed", "locked"].contains @get('status')
   disableTranslation: false
   language: Ember.computed 'concept', 'currentUser.user.language', ->
     @get('currentUser.user.language')
