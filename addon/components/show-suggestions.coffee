@@ -46,11 +46,15 @@ ShowSuggestionsComponent = Ember.Component.extend
       else
         @set('showSuggestions', false)
     toggleSuggestion: ->
+      if @get 'disabled'
+        return false
       if @get('shouldSendAction')
         @sendAction('toggleSuggestions')
       else
         @toggleProperty('showSuggestions')
     selectSuggestion: (translation) ->
+      if @get 'disabled'
+        return false
       unless @get('disabled')
         @sendAction('selectSuggestion', @get('term'), translation)
 
