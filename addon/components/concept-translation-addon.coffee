@@ -6,21 +6,26 @@
 
 ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, TranslationsUtils, TermManager,
   layout: layout
-  keyboardShortcuts:
-    # <- statusses #
-    'ctrl+alt+1': 'ctrlalt1'
-    'ctrl+alt+2': 'ctrlalt2'
-    'ctrl+alt+3': 'ctrlalt3'
-    'ctrl+alt+4': 'ctrlalt4'
-    'ctrl+alt+5': 'ctrlalt5'
-    'ctrl+alt+6': 'ctrlalt6'
-    # -> #
-    # focus pref term #
-    'ctrl+alt+p': 'ctrlaltp'
-    # focus new alt term #
-    'ctrl+alt+a': 'ctrlalta'
-    # focus new hidden term #
-    'ctrl+alt+h': 'ctrlalth'
+  keyboardShortcuts: Ember.computed 'disableShortcuts', ->
+    if @get('disableShortcuts') then return {}
+    else
+      {
+        # <- statusses #
+        'ctrl+alt+1': 'ctrlalt1'
+        'ctrl+alt+2': 'ctrlalt2'
+        'ctrl+alt+3': 'ctrlalt3'
+        'ctrl+alt+4': 'ctrlalt4'
+        'ctrl+alt+5': 'ctrlalt5'
+        'ctrl+alt+6': 'ctrlalt6'
+        # -> #
+        # focus pref term #
+        'ctrl+alt+p': 'ctrlaltp'
+        # focus new alt term #
+        'ctrl+alt+a': 'ctrlalta'
+        # focus new hidden term #
+        'ctrl+alt+h': 'ctrlalth'
+      }
+
 
   store: Ember.inject.service('store')
   currentUser: Ember.inject.service()
@@ -34,6 +39,12 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
     {
       name: @get 'status'
     }
+
+  statusOptions: Ember.computed 'allowStatusChange', ->
+    if @get('allowStatusChange')
+      return @get('statusOptionsEnabled')
+    return @get('statusOptionsDisabled')
+
   statusOptionsEnabled: [
     {name: "to do"},
     {name: "in progress"},
@@ -129,18 +140,24 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
         role = roles.findBy('preflabel', 'neutral')
         term.setGender(role, true)
       @set 'prefTerm', term
-  statusSelectorTitle: 'Change the status of this concept. \nYou need one standard male, one standard female and at least one neutral genders. You need to set a gender for all alternative labels'
   allowStatusChange: Ember.computed 'task.status', 'task.language', ->
     status = @get('task.status')
     @get('task.language') and status and (status != 'locked')
+  statusSelectorTitle: Ember.computed 'allowStatusChange', 'hasOneOfEachGender', 'altTermsHaveGender', ->
+    buffer=""
+    if not @get('hasOneOfEachGender') then buffer += "You need one standard male, one standard female and at least one neutral genders.\n\n"
+    if not @get('altTermsHaveGender') then buffer += "You need to set a gender for all alternative labels.\n\n"
+    unless buffer then buffer += 'Change the status of this concept.'
+    buffer
   statusOptions: Ember.computed 'currentUser.userIsAdmin', 'altTermsHaveGender', 'hasOneOfEachGender', ->
     if @get('currentUser.userIsAdmin')
       @get 'statusOptionsEnabled'
-    allowChange =( @get('altTermsHaveGender') and @get('hasOneOfEachGender'))
-    if allowChange
-      @get 'statusOptionsEnabled'
     else
-      @get 'statusOptionsDisabled'
+      allowChange =( @get('altTermsHaveGender') and @get('hasOneOfEachGender'))
+      if allowChange
+        @get 'statusOptionsEnabled'
+      else
+        @get 'statusOptionsDisabled'
   hasOneOfEachGender: Ember.computed 'prefTerm.genders', "altTerms.@each.genders", ->
     smale=false
     sfemale=false

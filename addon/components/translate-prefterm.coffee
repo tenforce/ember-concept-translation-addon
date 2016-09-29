@@ -8,17 +8,21 @@
 
 TranslatePreftermComponent = Ember.Component.extend KeyboardShortcuts, TranslationsUtils, SuggestionsManager, SourceManager, TermManager,
   layout: layout
-  keyboardShortcuts:
-    'ctrl+alt+q':
-      action: 'goToQuestUrl'
-      scoped: true
-    'ctrl+alt+d':
-      action: 'deleteTerm'
-      scoped: true
-    'ctrl+alt+o':
-      action: 'toggleSource'
-      scoped: true
-      preventDefault: true
+  keyboardShortcuts: Ember.computed 'disableShortcuts', ->
+    if @get('disableShortcuts') then return {}
+    else
+      {
+        'ctrl+alt+q':
+          action: 'goToQuestUrl'
+          scoped: true
+        'ctrl+alt+d':
+          action: 'deleteTerm'
+          scoped: true
+        'ctrl+alt+o':
+          action: 'toggleSource'
+          scoped: true
+          preventDefault: true
+      }
 
 
   showQuestIfNotEmpty: Ember.computed 'term.literalForm', ->
@@ -39,11 +43,11 @@ TranslatePreftermComponent = Ember.Component.extend KeyboardShortcuts, Translati
     termRoles = @parseRolesFromString(term)
     if termRoles.length > 0
       term.set('roles', [])
-      @setGender(term, false, "neutral")
+      promises.push(@setGender(term, false, "neutral"))
     termRoles.forEach (role) =>
       if ["standard female term", "standard male term"].contains role
-        if role is "standard female term" then promises.push(@setAsPreferred(term, false, "female"))
-        else if role is "standard male term" then promises.push(@setAsPreferred(term, false, "male"))
+        if role is "standard female term" then promises.push(@setAsPreferred(term, false, "female", true))
+        else if role is "standard male term" then promises.push(@setAsPreferred(term, false, "male", true))
     Ember.RSVP.Promise.all(promises).then =>
       if save then term.save()
 

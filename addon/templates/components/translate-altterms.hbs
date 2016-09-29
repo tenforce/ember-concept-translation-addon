@@ -6,20 +6,22 @@
   <div class="block-content">
     {{#each altTerms as |term index|}}
       {{translate-altterm term=term concept=concept prefTerm=prefTerm altTerms=altTerms roles=roles allowDelete=true index=index sourceLanguage=sourceLanguage targetLanguage=targetLanguage translationDisabled=translationDisabled saveAltTerm="saveAltTerm" removeAltTerm="removeAltTerm"
-      saveSource="saveSource" displaySuggestions=false showQuest=showQuest showSource=showSource}}
+      saveSource="saveSource" displaySuggestions=false showQuest=showQuest showSource=showSource disableShortcuts=disableShortcuts}}
     {{/each}}
 
     {{#if showPlus}}
       {{#if newField}}
         {{translate-altterm term=newTerm concept=concept prefTerm=prefTerm altTerms=altTerms roles=roles allowDelete=false index="new" sourceLanguage=sourceLanguage targetLanguage=targetLanguage translationDisabled=translationDisabled saveAltTerm="saveNewAltTerm"
-        removeAltTerm="removeNewAltTerm" saveSource="saveNewSource" displaySuggestions=displaySuggestions showQuest=showQuest showSource=showSource}}
+        removeAltTerm="removeNewAltTerm" saveSource="saveNewSource" displaySuggestions=displaySuggestions showQuest=showQuest
+        showSource=showSource disableShortcuts=disableShortcuts}}
       {{/if}}
       <div class='action'>
         <button type="button" class="add" {{action 'showNewField'}}>+</button>
       </div>
     {{else}}
       {{translate-altterm term=newTerm concept=concept prefTerm=prefTerm altTerms=altTerms roles=roles allowDelete=false index="new" sourceLanguage=sourceLanguage targetLanguage=targetLanguage translationDisabled=translationDisabled saveAltTerm="saveNewAltTerm"
-      removeAltTerm="removeNewAltTerm" saveSource="saveNewSource" displaySuggestions=displaySuggestions showQuest=showQuest showSource=showSource}}
+      removeAltTerm="removeNewAltTerm" saveSource="saveNewSource" displaySuggestions=displaySuggestions showQuest=showQuest
+      showSource=showSource disableShortcuts=disableShortcuts}}
     {{/if}}
   </div>
 </div>

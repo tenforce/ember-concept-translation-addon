@@ -21,3 +21,16 @@ Add `{{concept-translation-addon concept=your.model defaultLang=your.language sh
 ## Installation
 
 `ember install git+ssh://git@git.tenforce.com:mu-semtech/concept-translation-addon.git`
+
+
+concept-translation-addon
+
+concept=model
+defaultLang=user.language
+showQuest=false
+showSuggestions=true
+showSource=true
+showPlus=false
+showElements=true
+toggleButton=false
+showLanguageSelector=true showStatusSelector=true defaultClasses=true showGendersBox=showGendersBox}}

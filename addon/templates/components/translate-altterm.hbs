@@ -1,7 +1,8 @@
 <div class="term{{if shouldHighlight " focus"}}">
   {{#if showSource}}
     <div class="source">
-      {{show-source term=term saveSource="saveSource" buttonId=(concat "altSources" index) displaySource=displaySource disabled=translationDisabled}}
+      {{show-source term=term saveSource="saveSource" buttonId=(concat "altSources" index) displaySource=displaySource
+      disabled=translationDisabled disableShortcuts=disableShortcuts}}
     </div>
   {{/if}}
   <div class="input-box">
