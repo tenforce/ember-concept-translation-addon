@@ -6,7 +6,8 @@ TranslationsUtilsMixin = Ember.Mixin.create
     if @get('term.literalForm') then return false
     else return true
   shouldHighlight: Ember.computed 'emptyTerm', 'termIsFocused', ->
-    if @get('emptyTerm') or @get('termIsFocused') then return true
+    # if @get('emptyTerm') or @get('termIsFocused') then return true
+    if @get('termIsFocused') then return true
     else return false
   termIsFocused: false
   parseRolesFromString: (term) ->
