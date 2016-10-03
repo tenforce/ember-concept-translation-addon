@@ -18,8 +18,10 @@ TranslateAlttermsComponent = Ember.Component.extend TranslationsUtils, SourceSav
     @get('altTerms').removeObject(term)
     term.destroyRecord()
 
-  newTerm: Ember.computed ->
-    @generateAltTerm()
+  uglyObserver: Ember.observer('concept.id', 'language', ->
+    return unless @get('concept') and @get('language')
+    @set('newTerm', @generateAltTerm())
+  ).on('init')
 
   newField: false
 

@@ -7,8 +7,10 @@
 TranslateHiddentermsComponent = Ember.Component.extend TranslationsUtils, SourceSaverManager, TermManager,
   layout: layout
   store: Ember.inject.service('store')
-  newTerm: Ember.computed ->
-    @generateHiddenTerm()
+  uglyObserver: Ember.observer('concept.id', 'language', ->
+    return unless @get('concept') and @get('language')
+    @set('newTerm', @generateHiddenTerm())
+  ).on('init')
   manageHiddenTermSaving: (term) ->
     term.save()
   removeHiddenTerm: (term, index) ->
