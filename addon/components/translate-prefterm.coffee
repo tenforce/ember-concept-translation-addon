@@ -62,5 +62,13 @@ TranslatePreftermComponent = Ember.Component.extend KeyboardShortcuts, Translati
         @managePrefTermSaving(term, true)
       else
         @changeTermValue(term, event, false)
+    deleteTerm: ->
+      term = @get('term')
+      event =
+        target:
+          value: ''
+      @changeTermValue(term, event, false)
+      term.set('source', null)
+      if term.get('id') then term.save()
 
 `export default TranslatePreftermComponent`

@@ -61,8 +61,8 @@ TranslateAlttermComponent = Ember.Component.extend KeyboardShortcuts, Translatio
           target:
             value: ''
         @changeTermValue(term, event, false)
-        term.set('source', '')
-        term.save()
+        term.set('source', null)
+        if term.get('id') then term.save()
       else
         @sendAction('removeAltTerm', term, @get('index'))
 

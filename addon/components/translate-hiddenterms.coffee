@@ -21,8 +21,6 @@ TranslateHiddentermsComponent = Ember.Component.extend TranslationsUtils, Source
         @$(".tabbable")[index]?.focus()
     @get('hiddenTerms').removeObject(term)
     term.destroyRecord()
-    if term.get('id')
-      @get('concept').save()
   newField: false
   actions:
     showNewField: ->
@@ -43,5 +41,5 @@ TranslateHiddentermsComponent = Ember.Component.extend TranslationsUtils, Source
         target:
           value: ''
       @changeTermValue(term, event, false)
-      term.set('source', '')
+      term.set('source', null)
 `export default TranslateHiddentermsComponent`

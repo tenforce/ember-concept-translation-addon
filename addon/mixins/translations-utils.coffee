@@ -47,13 +47,5 @@ TranslationsUtilsMixin = Ember.Mixin.create
     changeTermValue: (term, event) ->
       @changeTermValue(term, event, false)
       return false
-    deleteTerm: ->
-      term = @get('term')
-      event =
-        target:
-          value: ''
-      @changeTermValue(term, event, false)
-      term.set('source', '')
-      #term.save()
 
 `export default TranslationsUtilsMixin`

@@ -58,8 +58,8 @@ TranslateHiddentermComponent = Ember.Component.extend KeyboardShortcuts, Transla
           target:
             value: ''
         @changeTermValue(term, event, false)
-        term.set('source', '')
-        term.save()
+        term.set('source', null)
+        if term.get('id') then term.save()
       else
         @sendAction('removeHiddenTerm', term, @get('index'))
 

@@ -17,8 +17,6 @@ TranslateAlttermsComponent = Ember.Component.extend TranslationsUtils, SourceSav
         @$(".tabbable")[index]?.focus()
     @get('altTerms').removeObject(term)
     term.destroyRecord()
-    if term.get('id')
-      @get('concept').save()
 
   newTerm: Ember.computed ->
     @generateAltTerm()
@@ -61,7 +59,7 @@ TranslateAlttermsComponent = Ember.Component.extend TranslationsUtils, SourceSav
         target:
           value: ''
       @changeTermValue(term, event, false)
-      term.set('source', '')
+      term.set('source', null)
 
 
 `export default TranslateAlttermsComponent`
