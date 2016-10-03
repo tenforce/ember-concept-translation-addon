@@ -32,9 +32,11 @@
 
     {{#if showElements}}
       {{translate-prefterm concept=concept term=prefTerm prefTerm=prefTerm altTerms=altTerms roles=roles language=language sourceLanguage=sourceLanguage targetLanguage=targetLanguage translationDisabled=translationDisabled displaySuggestions=showSuggestions
-      showQuest=showQuest showSource=showSource showPlus=showPlus}} {{translate-altterms concept=concept prefTerm=prefTerm altTerms=altTerms roles=roles language=language sourceLanguage=sourceLanguage targetLanguage=targetLanguage translationDisabled=translationDisabled
-      displaySuggestions=showSuggestions showQuest=showQuest showSource=showSource showPlus=showPlus}} {{translate-hiddenterms concept=concept hiddenTerms=hiddenTerms roles=roles language=language sourceLanguage=sourceLanguage targetLanguage=targetLanguage
-      translationDisabled=translationDisabled displaySuggestions=showSuggestions showQuest=showQuest showSource=showSource showPlus=showPlus}}
+      showQuest=showQuest showSource=showSource showPlus=showPlus disableShortcuts=disableShortcuts}}
+      {{translate-altterms concept=concept prefTerm=prefTerm altTerms=altTerms roles=roles language=language sourceLanguage=sourceLanguage targetLanguage=targetLanguage translationDisabled=translationDisabled
+      displaySuggestions=showSuggestions showQuest=showQuest showSource=showSource showPlus=showPlus disableShortcuts=disableShortcuts}}
+      {{translate-hiddenterms concept=concept hiddenTerms=hiddenTerms roles=roles language=language sourceLanguage=sourceLanguage targetLanguage=targetLanguage
+      translationDisabled=translationDisabled displaySuggestions=showSuggestions showQuest=showQuest showSource=showSource showPlus=showPlus disableShortcuts=disableShortcuts}}
       {{#if showGendersBox}}
         {{#unless emptyGenderBox}}
           <div class="block">
