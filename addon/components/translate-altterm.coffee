@@ -11,18 +11,21 @@ TranslateAlttermComponent = Ember.Component.extend KeyboardShortcuts, Translatio
   keyboardShortcuts: Ember.computed 'disableShortcuts', ->
     if @get('disableShortcuts') then return {}
     else
-      {
-        'ctrl+alt+q':
+      obj=
+        {
+          'ctrl+alt+d':
+            action: 'deleteTerm'
+            scoped: true
+          'ctrl+alt+o':
+            action: 'toggleSource'
+            scoped: true
+            preventDefault: true
+        }
+      if @get('showQuest')
+        obj['ctrl+alt+q']=
           action: 'goToQuestUrl'
           scoped: true
-        'ctrl+alt+d':
-          action: 'deleteTerm'
-          scoped: true
-        'ctrl+alt+o':
-          action: 'toggleSource'
-          scoped: true
-          preventDefault: true
-      }
+      obj
 
   pathToQuest: Ember.computed 'term.literalForm', ->
     term = @get('term')

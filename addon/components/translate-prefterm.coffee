@@ -11,19 +11,21 @@ TranslatePreftermComponent = Ember.Component.extend KeyboardShortcuts, Translati
   keyboardShortcuts: Ember.computed 'disableShortcuts', ->
     if @get('disableShortcuts') then return {}
     else
-      {
-        'ctrl+alt+q':
+      obj=
+        {
+          'ctrl+alt+d':
+            action: 'deleteTerm'
+            scoped: true
+          'ctrl+alt+o':
+            action: 'toggleSource'
+            scoped: true
+            preventDefault: true
+        }
+      if @get('showQuest')
+        obj['ctrl+alt+q']=
           action: 'goToQuestUrl'
           scoped: true
-        'ctrl+alt+d':
-          action: 'deleteTerm'
-          scoped: true
-        'ctrl+alt+o':
-          action: 'toggleSource'
-          scoped: true
-          preventDefault: true
-      }
-
+      obj
 
   showQuestIfNotEmpty: Ember.computed 'term.literalForm', ->
     if @get('term.literalForm') then return true else return false
