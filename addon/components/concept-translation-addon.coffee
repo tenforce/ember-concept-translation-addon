@@ -121,7 +121,7 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
         if fetchStatus
           @set 'status', fetchStatus || "none"
         else
-          disableStatusSelector = true
+          @set('disableStatusSelector', true)
   _ensurePrefLabels: ->
     concept = @get 'concept'
     unless @get('roles')
@@ -142,7 +142,8 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
         role = roles.findBy('preflabel', 'neutral')
         term.setGender(role, true)
       @set 'prefTerm', term
-  allowStatusChange: Ember.computed 'task.status', 'task.language', ->
+  allowStatusChange: Ember.computed 'task.status', 'task.language', 'translationDisabled', ->
+    if @get('translationDisabled') then return false
     status = @get('task.status')
     @get('task.language') and status and (status != 'locked')
   statusSelectorTitle: Ember.computed 'allowStatusChange', 'hasOneOfEachGender', 'altTermsHaveGender', ->
