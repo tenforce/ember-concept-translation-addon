@@ -142,7 +142,9 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
         role = roles.findBy('preflabel', 'neutral')
         term.setGender(role, true)
       @set 'prefTerm', term
-  allowStatusChange: Ember.computed 'task.status', 'task.language', 'translationDisabled', ->
+  allowStatusChange: Ember.computed 'task', 'task.status', 'task.language', 'translationDisabled', 'currentUser.userIsAdmin',  ->
+    unless @get('task') then return false
+    if @get('currentUser.userIsAdmin') then return true
     if @get('translationDisabled') then return false
     status = @get('task.status')
     @get('task.language') and status and (status != 'locked')
