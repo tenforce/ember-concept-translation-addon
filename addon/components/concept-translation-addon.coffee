@@ -80,9 +80,10 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
     @_super(arguments)
     if @get('defaultClasses') then @set 'classNames',["concept-translation"] else @set 'classNames',[""]
     @ensureTermsAreCorrect()
-  uglyObserver: Ember.observer 'concept.id', 'language', ->
-    return unless @get('concept') and @get('language')
+  uglyObserver: Ember.observer 'concept.id', 'language',( ->
+    return unless @get('concept.id') and @get('language')
     @ensureTermsAreCorrect()
+  ).on('init')
   ensureTermsAreCorrect: ->
     # console.log("setting labels in #{@get('language')} for concept #{@get('concept.id')}")
     concept = @get('concept')
@@ -119,9 +120,10 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
         @set 'task', task
         fetchStatus = task?.get('status')
         if fetchStatus
-          @set 'status', fetchStatus || "none"
+          @set 'status', fetchStatus
         else
           @set('disableStatusSelector', true)
+          @set 'status', 'none'
   _ensurePrefLabels: ->
     concept = @get 'concept'
     unless @get('roles')
