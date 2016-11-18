@@ -40,10 +40,15 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
       name: @get 'status'
     }
 
-  statusOptions: Ember.computed 'allowStatusChange', ->
-    if @get('allowStatusChange')
-      return @get('statusOptionsEnabled')
-    return @get('statusOptionsDisabled')
+  statusOptions: Ember.computed 'currentUser.userIsAdmin', 'altTermsHaveGender', 'hasOneOfEachGender', ->
+    if @get('currentUser.userIsAdmin')
+      @get 'statusOptionsEnabled'
+    else
+      allowChange =( @get('altTermsHaveGender') and @get('hasOneOfEachGender'))
+      if allowChange
+        @get 'statusOptionsEnabled'
+      else
+        @get 'statusOptionsDisabled'
 
   statusOptionsEnabled: [
     {name: "to do"},
@@ -156,15 +161,7 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
     if not @get('altTermsHaveGender') then buffer += "You need to set a gender for all alternative labels.\n\n"
     unless buffer then buffer += 'Change the status of this concept.'
     buffer
-  statusOptions: Ember.computed 'currentUser.userIsAdmin', 'altTermsHaveGender', 'hasOneOfEachGender', ->
-    if @get('currentUser.userIsAdmin')
-      @get 'statusOptionsEnabled'
-    else
-      allowChange =( @get('altTermsHaveGender') and @get('hasOneOfEachGender'))
-      if allowChange
-        @get 'statusOptionsEnabled'
-      else
-        @get 'statusOptionsDisabled'
+
   hasOneOfEachGender: Ember.computed 'prefTerm.genders', "altTerms.@each.genders", ->
     smale=false
     sfemale=false
