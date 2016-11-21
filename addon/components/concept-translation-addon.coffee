@@ -71,6 +71,9 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
   disableStatusSelector: false
 
   translationDisabled: Ember.computed 'status', 'disableTranslation', ->
+    withoutTasks = @get 'withoutTasks'
+    if withoutTasks && withoutTasks == true
+      return false
     if @get 'disableTranslation'
       return true
     else

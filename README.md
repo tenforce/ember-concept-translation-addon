@@ -17,6 +17,7 @@ Add `{{concept-translation-addon concept=your.model defaultLang=your.language sh
 - `toggleButton` flag if you want a header button. This button shows or hides the 'term editor'
 - `showLanguageSelector` flag if you want a language selector or not
 - `showStatusSelector` flag if you want a status selector or not
+- `withoutTasks` flag if you want to disable tasks. By default it is false.
 
 ## Installation
 
