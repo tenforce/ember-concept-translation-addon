@@ -114,12 +114,32 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
     lang = @get('language')
     @get('concept').get('hiddenLabels').reload().then (terms) =>
       unless @get('isDestroyed')
-        @set 'hiddenTerms', terms.filterBy('language', lang)
+        hiddenTerms = terms.filterBy('language', lang)
+        sorted = hiddenTerms.sort (a, b) ->
+          if a.get('literalForm') > b.get('literalForm') then return 1
+          else if a.get('literalForm') < b.get('literalForm') then return -1
+          else
+            timea = a.get('lastModified')
+            timeb = b.get('lastModified')
+            if timea > timeb then return 1
+            else if timea < timeb then return -1
+            return 0
+        @set 'hiddenTerms', sorted
   _ensureAltLabels: ->
     lang = @get('language')
     @get('concept').get('altLabels').reload().then (terms) =>
       unless @get('isDestroyed')
-        @set 'altTerms', terms.filterBy('language', lang)
+        altTerms = terms.filterBy('language', lang)
+        sorted = altTerms.sort (a, b) ->
+          if a.get('literalForm') > b.get('literalForm') then return 1
+          else if a.get('literalForm') < b.get('literalForm') then return -1
+          else
+            timea = a.get('lastModified')
+            timeb = b.get('lastModified')
+            if timea > timeb then return 1
+            else if timea < timeb then return -1
+            return 0
+        @set 'altTerms', sorted
   _ensureTasks: ->
     @get('store').query('task', 'filter[concept][id]': @get('concept').get('id')).then (tasks) =>
       unless @get('isDestroyed')
