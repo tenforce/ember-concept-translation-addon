@@ -196,9 +196,6 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
     unless buffer then buffer += 'Change the status of this concept.'
     buffer
 
-  tooManyPrefTerms: Ember.computed 'prefTerms.length', ->
-    return @get('prefTerms.length') > 1
-
   hasOneOfEachGender: Ember.computed 'prefTerms.@each.genders', "altTerms.@each.genders", ->
     smale=false
     sfemale=false
