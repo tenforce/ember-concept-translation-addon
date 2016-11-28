@@ -38,8 +38,6 @@ TranslatePreftermsComponent = Ember.Component.extend TranslationsUtils, SourceSa
     Ember.RSVP.Promise.all(promises).then =>
       if save then term.save()
 
-  layout: layout
-
   actions:
     showNewField: ->
       @toggleProperty('newField')
