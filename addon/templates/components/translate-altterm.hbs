@@ -14,7 +14,10 @@
       {{/if}}
     {{/if}}
   </div>
-  <div class="button-group">
+  {{#if loadingRoles}}
+      <div class="button-group"><i class="fa fa-spinner fa-pulse"></i></div>
+  {{else}}
+    <div class="button-group">
     {{#if term.id}}
       <button tabindex=-1 disabled= {{translationDisabled}} class="gender preferred {{if term.preferredMale 'active'}}" {{action 'toggleStandardMale' term}}>
         standard male
@@ -33,6 +36,7 @@
       </button>
     {{/if}}
   </div>
+  {{/if}}
   {{#if allowDelete}}
     <button tabindex=-1 disabled= {{translationDisabled}} class="action remove" {{action 'removeAltTerm' term index}}>
       <i class="fa fa-minus"></i>

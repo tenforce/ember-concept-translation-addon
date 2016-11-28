@@ -1,6 +1,15 @@
 `import Ember from 'ember'`
 
 TermManagerMixin = Ember.Mixin.create
+
+  loadingRoles: true
+  checkLoadingRoles: Ember.observer('concept.id', ->
+    @set 'loadingRoles', true
+    if @get('term')
+      @get('term.roles').then =>
+        @set 'loadingRoles', false
+  ).on('init')
+
   newLabel: ->
     label = @get('store').createRecord('conceptLabel', literalFormValues: [])
     label.get('literalFormValues').pushObject(Ember.Object.create({content: "", language: @get('language')}))

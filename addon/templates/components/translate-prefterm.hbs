@@ -16,19 +16,23 @@
       {{/if}}
     {{/if}}
   </div>
-  <div class="button-group">
-    {{#if term.id}}
-      <button tabindex=-1 disabled= {{translationDisabled}} class="gender preferred {{if term.preferredMale 'active'}}" {{action 'toggleStandardMale' term}}>
-      standard male
-      </button>
-      <button tabindex=-1 disabled= {{translationDisabled}} class="gender preferred {{if term.preferredFemale 'active'}}" {{action 'toggleStandardFemale' term}}>
-      standard female
-      </button>
-      <button tabindex=-1 disabled= {{translationDisabled}} class="gender {{if term.neutral 'active'}}" {{action 'toggleNeutral' term}}>
-      neutral
-      </button>
-    {{/if}}
-  </div>
+  {{#if loadingRoles}}
+    <div class="button-group"><i class="fa fa-spinner fa-pulse"></i></div>
+  {{else}}
+    <div class="button-group">
+      {{#if term.id}}
+        <button tabindex=-1 disabled= {{translationDisabled}} class="gender preferred {{if term.preferredMale 'active'}}" {{action 'toggleStandardMale' term}}>
+        standard male
+        </button>
+        <button tabindex=-1 disabled= {{translationDisabled}} class="gender preferred {{if term.preferredFemale 'active'}}" {{action 'toggleStandardFemale' term}}>
+        standard female
+        </button>
+        <button tabindex=-1 disabled= {{translationDisabled}} class="gender {{if term.neutral 'active'}}" {{action 'toggleNeutral' term}}>
+        neutral
+        </button>
+      {{/if}}
+    </div>
+  {{/if}}
   {{#if allowDelete}}
     <button tabindex=-1 disabled= {{translationDisabled}} class="action remove" {{action 'removePrefTerm' term index}}>
     <i class="fa fa-minus"></i>
