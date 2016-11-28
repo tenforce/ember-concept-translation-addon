@@ -40,20 +40,12 @@ TranslatePreftermComponent = Ember.Component.extend KeyboardShortcuts, Translati
     else
       return ""
 
-  managePrefTermSaving: (term, save) ->
-    promises = []
-    termRoles = @parseRolesFromString(term)
-    if termRoles.length > 0
-      term.set('roles', [])
-      promises.push(@setGender(term, false, "neutral"))
-    termRoles.forEach (role) =>
-      if ["standard female term", "standard male term"].contains role
-        if role is "standard female term" then promises.push(@setAsPreferred(term, false, "female", true))
-        else if role is "standard male term" then promises.push(@setAsPreferred(term, false, "male", true))
-    Ember.RSVP.Promise.all(promises).then =>
-      if save then term.save()
 
   actions:
+    toggleNeutral: (term) ->
+      @setGender(term, true, 'neutral')
+    removePrefTerm: (term, index) ->
+      @sendAction('removePrefTerm', term, index)
     goToQuestUrl: ->
       if @get 'showQuest'
         url = @get('pathToQuest')
@@ -61,7 +53,8 @@ TranslatePreftermComponent = Ember.Component.extend KeyboardShortcuts, Translati
           window.open(url)
     prefTermContentModified: (term, event) ->
       if(event.keyCode == 13 && not event.shiftKey)
-        @managePrefTermSaving(term, true)
+        @changeTermValue(term, event, true)
+        @sendAction('savePrefTerm', term)
       else
         @changeTermValue(term, event, false)
     deleteTerm: ->

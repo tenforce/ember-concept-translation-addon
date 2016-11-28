@@ -1,0 +1,19 @@
+<div class="block">
+  <div class="block-title">
+    {{#if tooManyPrefTerms}}
+      <label>Preferred terms</label>
+    {{else}}
+      <label>Preferred term</label>
+    {{/if}}
+    <i class="fa fa-info-circle" title="Each concept within ESCO has a designated, unique preferred name per ESCO language. Out of a group of terms with similar meaning, the one that best represents the concept is chosen to be the preferred term. The preferred term of a given concept is unique per language and can always be used for cases where the natural gender is not known."></i>
+    {{#if tooManyPrefTerms}}<i class="fa fa-exclamation-triangle" title="A concept should only have a single preferred term per language"></i>{{/if}}
+  </div>
+  <div class="block-content">
+    {{#each prefTerms as |term index|}}
+      {{translate-prefterm term=term concept=concept prefTerms=prefTerms altTerms=altTerms roles=roles allowDelete=tooManyPrefTerms index=index
+      sourceLanguage=sourceLanguage targetLanguage=targetLanguage translationDisabled=translationDisabled savePrefTerm="savePrefTerm"
+      removePrefTerm="removePrefTerm" saveSource="saveSource" displaySuggestions=(not tooManyPrefTerms) showQuest=showQuest
+      showSource=showSource disableShortcuts=disableShortcuts}}
+    {{/each}}
+  </div>
+</div>

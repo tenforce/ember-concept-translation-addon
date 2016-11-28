@@ -7,14 +7,14 @@ VisualGenderBoxComponent = Ember.Component.extend
   initialize: ->
     @_super(arguments...)
     @get('altTerms')
-  standardMaleTerm: Ember.computed 'altTerms.@each.preferredMale', 'prefTerm.preferredMale', ->
-    if @get('prefTerm.preferredMale')
-      return @get('prefTerm')
+  standardMaleTerm: Ember.computed 'altTerms.@each.preferredMale', 'prefTerms.@each.preferredMale', ->
+    if @get('prefTerms').filterBy('preferredMale', true)?.get('firstObject')
+      return @get('prefTerms').filterBy('preferredMale', true)?.get('firstObject')
     else
       @get('altTerms').filterBy('preferredMale', true)?.get('firstObject')
-  standardFemaleTerm: Ember.computed 'altTerms.@each.preferredFemale', 'prefTerm.preferredFemale', ->
-    if @get('prefTerm.preferredFemale')
-      return @get('prefTerm')
+  standardFemaleTerm: Ember.computed 'altTerms.@each.preferredFemale', 'prefTerms.@each.preferredFemale', ->
+    if @get('prefTerms').filterBy('preferredFemale', true)?.get('firstObject')
+      return @get('prefTerms').filterBy('preferredFemale', true)?.get('firstObject')
     else
       @get('altTerms').filterBy('preferredFemale', true)?.get('firstObject')
   maleTerms: Ember.computed 'altTerms.@each.male', 'standardMaleTerm', ->
@@ -52,9 +52,12 @@ VisualGenderBoxComponent = Ember.Component.extend
         empty = false
         return
     return empty
-  emptyNeutral: Ember.computed 'neutralTerms.@each.literalForm', 'prefTerm.literalForm', ->
+  emptyNeutral: Ember.computed 'neutralTerms.@each.literalForm', 'prefTerms.@each.literalForm', ->
     empty = true
-    if @get('prefTerm.literalForm') and @get('prefTerm.neutral') then return false
+    @get('prefTerms').forEach (prefterm) ->
+      if prefterm.get('literalForm')
+        empty = false
+        return
     @get('neutralTerms').forEach (neutralterm) ->
       if neutralterm.get('literalForm')
         empty = false
@@ -75,7 +78,7 @@ VisualGenderBoxComponent = Ember.Component.extend
         empty = false
         return
     return empty
-  emptyAltNeutral: Ember.computed 'neutralTerms.@each.literalForm', 'prefTerm.literalForm', ->
+  emptyAltNeutral: Ember.computed 'neutralTerms.@each.literalForm', 'prefTerms.@each.literalForm', ->
     empty = true
     @get('neutralTerms').forEach (neutralterm) ->
       if neutralterm.get('literalForm')

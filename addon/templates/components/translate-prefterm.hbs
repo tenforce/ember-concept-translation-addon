@@ -1,42 +1,41 @@
-<div class="block">
-  <div class="block-title">
-    <label>Title / Preferred term</label>
-    <i class="fa fa-info-circle" title="Each concept within ESCO has a designated, unique preferred name per ESCO language. Out of a group of terms with similar meaning, the one that best represents the concept is chosen to be the preferred term. The preferred term of a given concept is unique per language and can always be used for cases where the natural gender is not known."></i>
-  </div>
-  <div class="block-content">
-    <div class="term{{if shouldHighlight " focus"}}">
-      {{#if showSource}}
-        <div class="source">
-          {{show-source term=prefTerm saveSource="saveSource" buttonId=(concat "prefSource0") displaySource=displaySource
-          disabled=translationDisabled disableShortcuts=disableShortcuts disableShortcuts=disableShortcuts}}
-        </div>
-      {{/if}}
-      <div class="input-box">
-        <input disabled= {{translationDisabled}} type="text" value= {{prefTerm.literalForm}} class="tabbable pref" name="pref0" onkeyup= {{action "prefTermContentModified" prefTerm}} onchange= {{action "changeTermValue" prefTerm value=target.value}} onfocus= {{action "focusTerm" true}}
-            onblur= {{action "focusTerm" false}} placeholder= {{placeholder}} />
-        {{#if showQuest}}
-          {{#if showQuestIfNotEmpty}}
-            <button class="quest-btn" {{action 'goToQuestUrl'}} title='Link to Quest' tabindex=-1></button>
-          {{/if}}
-        {{/if}}
-      </div>
-      {{#if prefTerm.id}}
-        <div class="button-group">
-          <button tabindex=-1 disabled= {{translationDisabled}} class="gender preferred {{if prefTerm.preferredMale 'active'}}" {{action 'togglePreferredMale' prefTerm}}>
-            standard male
-          </button>
-          <button tabindex=-1 disabled= {{translationDisabled}} class="gender preferred {{if prefTerm.preferredFemale 'active'}}" {{action 'togglePreferredFemale' prefTerm}}>
-            standard female
-          </button>
-          <button tabindex=-1 disabled=true class="gender preferred disabled active">
-            neutral
-          </button>
-        </div>
-      {{/if}}
-      {{#if displaySuggestions}}
-        {{show-suggestions term=prefTerm label=(await concept.defaultPrefLabel) sourceLanguage=sourceLanguage buttonId="prefTerm0" targetLanguage=targetLanguage showSuggestions=showSuggestions shouldSendAction=true toggleSuggestions="toggleSuggestions" closeSuggestions="closeSuggestions"
-        selectSuggestion="selectSuggestion" disabled=translationDisabled}}
-      {{/if}}
+<div class="term{{if shouldHighlight " focus"}}">
+  {{#if showSource}}
+    <div class="source">
+      {{show-source term=term saveSource="saveSource" buttonId=(concat "prefSources" index) displaySource=displaySource
+      disabled=translationDisabled disableShortcuts=disableShortcuts}}
     </div>
+  {{/if}}
+  <div class="input-box">
+    <input type="text" disabled= {{translationDisabled}} value= {{term.literalForm}} class="tabbable pref" name="pref{{index}}"
+           onkeyup= {{action "prefTermContentModified" term}} onchange= {{action "changeTermValue" term value=target.value}}
+           onfocus= {{action "focusTerm" true}}
+        onblur= {{action "focusTerm" false}} placeholder= {{placeholder}} />
+    {{#if showQuest}}
+      {{#if showQuestIfNotEmpty}}
+        <button class="quest-btn" {{action 'goToQuestUrl'}} title='Link to Quest' tabindex=-1></button>
+      {{/if}}
+    {{/if}}
   </div>
+  <div class="button-group">
+    {{#if term.id}}
+      <button tabindex=-1 disabled= {{translationDisabled}} class="gender preferred {{if term.preferredMale 'active'}}" {{action 'toggleStandardMale' term}}>
+      standard male
+      </button>
+      <button tabindex=-1 disabled= {{translationDisabled}} class="gender preferred {{if term.preferredFemale 'active'}}" {{action 'toggleStandardFemale' term}}>
+      standard female
+      </button>
+      <button tabindex=-1 disabled= {{translationDisabled}} class="gender {{if term.neutral 'active'}}" {{action 'toggleNeutral' term}}>
+      neutral
+      </button>
+    {{/if}}
+  </div>
+  {{#if allowDelete}}
+    <button tabindex=-1 disabled= {{translationDisabled}} class="action remove" {{action 'removePrefTerm' term index}}>
+    <i class="fa fa-minus"></i>
+    </button>
+  {{else if displaySuggestions}}
+    {{show-suggestions term=term label=(await concept.defaultPrefLabel) sourceLanguage=sourceLanguage buttonId=(concat "prefTerm" index)
+    targetLanguage=targetLanguage showSuggestions=showSuggestions shouldSendAction=true toggleSuggestions="toggleSuggestions"
+    closeSuggestions="closeSuggestions" selectSuggestion="selectSuggestion" disabled=translationDisabled}}
+  {{/if}}
 </div>

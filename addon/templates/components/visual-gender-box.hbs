@@ -36,11 +36,13 @@
     <div class="list">
         <div class="line"></div>
         <div class="list-item default">
-          {{#if prefTerm.literalForm}}
-            <span class="wrapper">
-                <label>{{prefTerm.literalForm}}</label>
-            </span>
-          {{/if}}
+          <span class="wrapper">
+            {{#each prefTerms as |neutral|}}
+              {{#if neutral.literalForm}}
+                <label>{{neutral.literalForm}}</label>
+              {{/if}}
+            {{/each}}
+          </span>
         </div>
         <div class="list-item">
           {{#unless emptyAltNeutral}}

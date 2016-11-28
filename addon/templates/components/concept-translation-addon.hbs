@@ -31,7 +31,8 @@
     </div>
 
     {{#if showElements}}
-      {{translate-prefterm concept=concept term=prefTerm prefTerm=prefTerm altTerms=altTerms roles=roles language=language sourceLanguage=sourceLanguage targetLanguage=targetLanguage translationDisabled=translationDisabled displaySuggestions=showSuggestions
+      {{translate-prefterms concept=concept prefTerms=prefTerms altTerms=altTerms roles=roles language=language
+      sourceLanguage=sourceLanguage targetLanguage=targetLanguage translationDisabled=translationDisabled displaySuggestions=showSuggestions
       showQuest=showQuest showSource=showSource showPlus=showPlus disableShortcuts=disableShortcuts}}
       {{translate-altterms concept=concept prefTerm=prefTerm altTerms=altTerms roles=roles language=language sourceLanguage=sourceLanguage targetLanguage=targetLanguage translationDisabled=translationDisabled
       displaySuggestions=showSuggestions showQuest=showQuest showSource=showSource showPlus=showPlus disableShortcuts=disableShortcuts}}
@@ -40,7 +41,7 @@
       {{#if showGendersBox}}
         {{#unless emptyGenderBox}}
           <div class="block">
-            {{visual-gender-box altTerms=altTerms prefTerm=prefTerm}}
+            {{visual-gender-box altTerms=altTerms prefTerms=prefTerms}}
           </div>
         {{/unless}}
       {{/if}}

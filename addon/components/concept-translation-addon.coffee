@@ -102,6 +102,7 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
       @set 'description', ''
 
     promises = [
+      @_ensureRoles(),
       @_ensureHiddenTerms(),
       @_ensureAltLabels(),
       @_ensureTasks(),
@@ -110,6 +111,11 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
     Ember.RSVP.all(promises).then =>
       unless @get('isDestroyed')
         @set 'loading', false
+  _ensureRoles: ->
+    unless @get('roles')
+      @get('store').findAll('label-role').then (roles) =>
+        unless @get('isDestroyed')
+          @set 'roles', roles
   _ensureHiddenTerms: ->
     lang = @get('language')
     @get('concept').get('hiddenLabels').reload().then (terms) =>
@@ -153,48 +159,60 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
           @set('disableStatusSelector', true)
           @set 'status', 'none'
   _ensurePrefLabels: ->
-    concept = @get 'concept'
-    unless @get('roles')
-      @get('store').findAll('label-role').then (roles) =>
-        unless @get('isDestroyed')
-          @set 'roles', roles
-          @initPrefTerm(concept, roles)
-    else
-      @initPrefTerm(concept, @get('roles'))
+    @initPrefTerm(@get('concept'), @get('roles'))
   initPrefTerm: (concept, roles) ->
     lang = @get('language')
     concept.get('prefLabels').reload().then (terms) =>
-      prefterms = terms.filterBy('language', lang)
-      term = prefterms.get('firstObject')
-      unless term
+      prefTerms = terms.filterBy('language', lang)
+      unless prefTerms?.length > 0
         term = @newLabel()
         term.set('prefLabelOf', concept)
         role = roles.findBy('preflabel', 'neutral')
         term.setGender(role, true)
-      @set 'prefTerm', term
-  allowStatusChange: Ember.computed 'task', 'task.status', 'task.language', 'translationDisabled', 'currentUser.userIsAdmin',  ->
+        prefTerms?.push(term)
+        term.save()
+      sorted = prefTerms.sort (a, b) ->
+        if a.get('literalForm') > b.get('literalForm') then return 1
+        else if a.get('literalForm') < b.get('literalForm') then return -1
+        else
+          timea = a.get('lastModified')
+          timeb = b.get('lastModified')
+          if timea > timeb then return 1
+          else if timea < timeb then return -1
+          return 0
+      @set 'prefTerms', sorted
+  allowStatusChange: Ember.computed 'task', 'task.status', 'task.language', 'translationDisabled', 'tooManyPrefTerms', 'currentUser.userIsAdmin',  ->
     unless @get('task') then return false
     if @get('currentUser.userIsAdmin') then return true
+    if @get('tooManyPrefTerms') then return false
     if @get('translationDisabled') then return false
     status = @get('task.status')
     @get('task.language') and status and (status != 'locked')
   statusSelectorTitle: Ember.computed 'allowStatusChange', 'hasOneOfEachGender', 'altTermsHaveGender', ->
     buffer=""
+    if @get('tooManyPrefTerms') then buffer += "You need at most one preferred label for each concept.\n\n"
     if not @get('hasOneOfEachGender') then buffer += "You need one standard male, one standard female and at least one neutral genders.\n\n"
     if not @get('altTermsHaveGender') then buffer += "You need to set a gender for all alternative labels.\n\n"
     unless buffer then buffer += 'Change the status of this concept.'
     buffer
 
-  hasOneOfEachGender: Ember.computed 'prefTerm.genders', "altTerms.@each.genders", ->
+  tooManyPrefTerms: Ember.computed 'prefTerms.length', ->
+    return @get('prefTerms.length') > 1
+
+  hasOneOfEachGender: Ember.computed 'prefTerms.@each.genders', "altTerms.@each.genders", ->
     smale=false
     sfemale=false
     neutral=false
-    prefgenders = @get('prefTerm.genders')
-    if prefgenders.contains('standard female term') then sfemale = true
-    if prefgenders.contains('standard male term') then smale = true
-    if prefgenders.contains('neutral') then neutral = true
-    if sfemale and smale and neutral then return true
     valid = false
+
+    prefTerms = @get('prefTerms')
+    prefTerms.forEach (prefterm) ->
+      genders = prefterm.get('genders')
+      if genders.contains('standard female term') then sfemale = true
+      if genders.contains('standard male term') then smale = true
+      if genders.contains('neutral') then neutral = true
+      if sfemale and smale and neutral then valid = true
+
     altTerms = @get('altTerms')
     altTerms.forEach (alterm) ->
       altgenders = alterm.get('genders')
@@ -220,28 +238,35 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
       @get('userTasks').incrementProperty(status.replace(`/ /g, ''`)) #increment new status
       @set 'status', status
 
-  emptyGenderBox: Ember.computed 'loading', 'emptyPrefTerm', 'emptyAltTerms', ->
+  emptyGenderBox: Ember.computed 'loading', 'emptyPrefTerms', 'emptyAltTerms', ->
     unless @get('loading')
-      return @get('emptyPrefTerm') and @get('emptyAltTerms')
+      return @get('emptyPrefTerms') and @get('emptyAltTerms')
 
-  emptyPrefTerm: Ember.computed 'prefTerm.literalForm', 'prefTerm.neutral', 'prefTerm.preferredFemale', 'prefTerm.preferredMale', ->
-    length= false
-    gender = false
-    if @get('prefTerm.literalForm') then length = true
-    if @get('prefTerm.neutral') then gender = true
-    else if @get('prefTerm.preferredFemale') then gender = true
-    else if @get('prefTerm.preferredMale') then gender = true
-    return not(length and gender)
-  emptyAltTerms: Ember.computed 'altTerms.@each', 'altTerms.@each.literalForm', 'altTerms.@each.neutral', 'altTerms.@each.male', 'altTerms.@each.female', ->
-    results = @get('altTerms').filter (alt) ->
+  tooManyPrefTerms: Ember.computed 'prefTerms.length', ->
+    @get('prefTerms.length') > 1
+  emptyPrefTerms: Ember.computed 'prefTerms.@each', 'prefTerms.@each.literalForm', 'prefTerms.@each.neutral', 'prefTerms.@each.preferredFemale', 'prefTerms.@each.preferredMale', ->
+    @get('prefTerms').forEach (term) ->
       length= false
       gender = false
-      if alt.get('literalForm') then length = true
-      if alt.get('neutral') then gender = true
-      else if alt.get('preferredFemale') then gender = true
-      else if alt.get('preferredMale') then gender = true
-      else if alt.get('female') then gender = true
-      else if alt.get('male') then gender = true
+      if term.get('literalForm') then length = true
+      if term.get('neutral') then gender = true
+      else if term.get('preferredFemale') then gender = true
+      else if term.get('preferredMale') then gender = true
+      else if term.get('female') then gender = true
+      else if term.get('male') then gender = true
+      return length and gender
+    if results?.length > 0 then return false
+    else return true
+  emptyAltTerms: Ember.computed 'altTerms.@each', 'altTerms.@each.literalForm', 'altTerms.@each.neutral', 'altTerms.@each.male', 'altTerms.@each.female', ->
+    results = @get('altTerms').filter (term) ->
+      length= false
+      gender = false
+      if term.get('literalForm') then length = true
+      if term.get('neutral') then gender = true
+      else if term.get('preferredFemale') then gender = true
+      else if term.get('preferredMale') then gender = true
+      else if term.get('female') then gender = true
+      else if term.get('male') then gender = true
       return length and gender
     if results?.length > 0 then return false
     else return true

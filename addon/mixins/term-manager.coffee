@@ -20,10 +20,10 @@ TermManagerMixin = Ember.Mixin.create
       if t.get('id') and t.hasRole(role.get('preflabel'))
         t.setGender(role, false).then ->
           t.save()
-    prefTerm = @get('prefTerm')
-    if prefTerm.get("id") and prefTerm.hasRole(role.get('preflabel'))
-      prefTerm.setGender(role, false).then ->
-        prefTerm.save()
+    @get('prefTerms').forEach (t) ->
+      if t.get('id') and t.hasRole(role.get('preflabel'))
+        t.setGender(role, false).then ->
+          t.save()
 
   setAsPreferred: (term, save, gender, preferred) ->
     return unless term
