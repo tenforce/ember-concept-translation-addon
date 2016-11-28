@@ -231,12 +231,13 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
         valid = false
     valid
   setStatus: (status) ->
-    task = @get('tasks').findBy('language', @get('language'))
-    task.set('status', status)
-    task.save().then =>
-      @get('userTasks').decrementProperty(@get('status').replace(`/ /g, ''`)) # decrement old status
-      @get('userTasks').incrementProperty(status.replace(`/ /g, ''`)) #increment new status
-      @set 'status', status
+    if @get('allowStatusChange')
+      task = @get('tasks').findBy('language', @get('language'))
+      task.set('status', status)
+      task.save().then =>
+        @get('userTasks').decrementProperty(@get('status').replace(`/ /g, ''`)) # decrement old status
+        @get('userTasks').incrementProperty(status.replace(`/ /g, ''`)) #increment new status
+        @set 'status', status
 
   emptyGenderBox: Ember.computed 'loading', 'emptyPrefTerms', 'emptyAltTerms', ->
     unless @get('loading')
