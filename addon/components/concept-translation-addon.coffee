@@ -87,7 +87,6 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
   init: ->
     @_super(arguments)
     if @get('defaultClasses') then @set 'classNames',["concept-translation"] else @set 'classNames',[""]
-    @ensureTermsAreCorrect()
   uglyObserver: Ember.observer 'concept.id', 'language',( ->
     return unless @get('concept.id') and @get('language')
     @ensureTermsAreCorrect()
@@ -101,21 +100,21 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
     else
       @set 'description', ''
 
-    promises = [
-      @_ensureRoles(),
-      @_ensureHiddenTerms(),
-      @_ensureAltLabels(),
-      @_ensureTasks(),
-      @_ensurePrefLabels()
-    ]
-    Ember.RSVP.all(promises).then =>
-      unless @get('isDestroyed')
-        @set 'loading', false
-  _ensureRoles: ->
-    unless @get('roles')
-      @get('store').findAll('label-role').then (roles) =>
+    @_ensureRoles().then =>
+      promises = [
+        @_ensureRoles(),
+        @_ensureHiddenTerms(),
+        @_ensureAltLabels(),
+        @_ensureTasks(),
+        @_ensurePrefLabels()
+      ]
+      Ember.RSVP.all(promises).then =>
         unless @get('isDestroyed')
-          @set 'roles', roles
+          @set 'loading', false
+  _ensureRoles: ->
+    @get('store').findAll('label-role').then (roles) =>
+      unless @get('isDestroyed')
+        @set 'roles', roles
   _ensureHiddenTerms: ->
     lang = @get('language')
     @get('concept').get('hiddenLabels').reload().then (terms) =>
