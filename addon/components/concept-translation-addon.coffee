@@ -242,7 +242,7 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
   tooManyPrefTerms: Ember.computed 'prefTerms.length', ->
     @get('prefTerms.length') > 1
   emptyPrefTerms: Ember.computed 'prefTerms.@each', 'prefTerms.@each.literalForm', 'prefTerms.@each.neutral', 'prefTerms.@each.preferredFemale', 'prefTerms.@each.preferredMale', ->
-    @get('prefTerms').forEach (term) ->
+    results = @get('prefTerms').filter (term) ->
       length= false
       gender = false
       if term.get('literalForm') then length = true
