@@ -26,6 +26,7 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
         'ctrl+alt+h': 'ctrlalth'
       }
 
+  showOnlyPreferred: false
 
   store: Ember.inject.service('store')
   currentUser: Ember.inject.service()

@@ -34,18 +34,20 @@
       {{translate-prefterms concept=concept prefTerms=prefTerms altTerms=altTerms roles=roles language=language
       sourceLanguage=sourceLanguage targetLanguage=targetLanguage translationDisabled=translationDisabled displaySuggestions=showSuggestions
       showQuest=showQuest showSource=showSource showPlus=showPlus disableShortcuts=disableShortcuts}}
-      {{translate-altterms concept=concept prefTerms=prefTerms altTerms=altTerms roles=roles language=language sourceLanguage=sourceLanguage
-      targetLanguage=targetLanguage translationDisabled=translationDisabled
-      displaySuggestions=showSuggestions showQuest=showQuest showSource=showSource showPlus=showPlus disableShortcuts=disableShortcuts}}
-      {{translate-hiddenterms concept=concept hiddenTerms=hiddenTerms roles=roles language=language sourceLanguage=sourceLanguage targetLanguage=targetLanguage
-      translationDisabled=translationDisabled displaySuggestions=showSuggestions showQuest=showQuest showSource=showSource showPlus=showPlus disableShortcuts=disableShortcuts}}
-      {{#if showGendersBox}}
-        {{#unless emptyGenderBox}}
-          <div class="block">
-            {{visual-gender-box altTerms=altTerms prefTerms=prefTerms}}
-          </div>
-        {{/unless}}
-      {{/if}}
+      {{#unless showOnlyPreferred}}
+        {{translate-altterms concept=concept prefTerms=prefTerms altTerms=altTerms roles=roles language=language sourceLanguage=sourceLanguage
+        targetLanguage=targetLanguage translationDisabled=translationDisabled
+        displaySuggestions=showSuggestions showQuest=showQuest showSource=showSource showPlus=showPlus disableShortcuts=disableShortcuts}}
+        {{translate-hiddenterms concept=concept hiddenTerms=hiddenTerms roles=roles language=language sourceLanguage=sourceLanguage targetLanguage=targetLanguage
+        translationDisabled=translationDisabled displaySuggestions=showSuggestions showQuest=showQuest showSource=showSource showPlus=showPlus disableShortcuts=disableShortcuts}}
+        {{#if showGendersBox}}
+          {{#unless emptyGenderBox}}
+            <div class="block">
+              {{visual-gender-box altTerms=altTerms prefTerms=prefTerms}}
+            </div>
+          {{/unless}}
+        {{/if}}
+      {{/unless}}
     {{/if}}
   </div>
 {{/if}}
