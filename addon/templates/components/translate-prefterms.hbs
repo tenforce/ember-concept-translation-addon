@@ -12,7 +12,7 @@
     {{#each prefTerms as |term index|}}
       {{translate-prefterm term=term concept=concept prefTerms=prefTerms altTerms=altTerms roles=roles allowDelete=tooManyPrefTerms index=index
       sourceLanguage=sourceLanguage targetLanguage=targetLanguage translationDisabled=translationDisabled savePrefTerm="savePrefTerm"
-      removePrefTerm="removePrefTerm" saveSource="saveSource" displaySuggestions=(not tooManyPrefTerms) showQuest=showQuest
+      removePrefTerm="removePrefTerm" saveSource="saveSource" displaySuggestions=(and displaySuggestions (not tooManyPrefTerms)) showQuest=showQuest
       showSource=showSource disableShortcuts=disableShortcuts}}
     {{/each}}
   </div>
