@@ -41,12 +41,11 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
       name: @get 'status'
     }
 
-  statusOptions: Ember.computed 'currentUser.userIsAdmin', 'altTermsHaveGender', 'hasOneOfEachGender', ->
+  statusOptions: Ember.computed 'currentUser.userIsAdmin', 'hasOneOfEachGender', 'tooManyPrefTerms', 'altTermsHaveGender', 'enableProtectedStatuses', ->
     if @get('currentUser.userIsAdmin')
       @get 'statusOptionsEnabled'
     else
-      allowChange =( @get('altTermsHaveGender') and @get('hasOneOfEachGender'))
-      if allowChange
+      if @get('enableProtectedStatuses')
         @get 'statusOptionsEnabled'
       else
         @get 'statusOptionsDisabled'
@@ -60,14 +59,19 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
     {name: "confirmed"}
   ]
 
-  statusOptionsDisabled: [
-    {name: "to do"},
-    {name: "in progress"},
-    {name: "translated", disabled: true},
-    {name: "reviewed without comments", disabled: true},
-    {name: "reviewed with comments", disabled: true},
-    {name: "confirmed", disabled: true}
-  ]
+  protectedStatuses: ["translated", "reviewed without comments", "reviewed with comments", "confirmed"]
+
+  enableProtectedStatuses: Ember.computed 'hasOneOfEachGender', 'tooManyPrefTerms', 'altTermsHaveGender', ->
+    @get('hasOneOfEachGender') and @get('altTermsHaveGender') and (not @get('tooManyPrefTerms'))
+
+  statusOptionsDisabled: Ember.computed "statusOptionsEnabled", "protectedStatuses", "enableProtectedStatuses", ->
+    options = @get 'statusOptionsEnabled'
+    protect = @get 'protectedStatuses'
+    options.map (option) ->
+      clone = Ember.mixin {}, option
+      if protect.indexOf(option.name) >= 0
+        clone.disabled = true
+      clone
 
   disableStatusSelector: false
 
@@ -188,7 +192,7 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
     if @get('translationDisabled') then return false
     status = @get('task.status')
     @get('task.language') and status and (status != 'locked')
-  statusSelectorTitle: Ember.computed 'allowStatusChange', 'hasOneOfEachGender', 'altTermsHaveGender', ->
+  statusSelectorTitle: Ember.computed 'allowStatusChange', 'hasOneOfEachGender', 'tooManyPrefTerms', 'altTermsHaveGender', ->
     buffer=""
     if @get('tooManyPrefTerms') then buffer += "You need at most one preferred label for each concept.\n\n"
     if not @get('hasOneOfEachGender') then buffer += "You need one standard male, one standard female and at least one neutral genders.\n\n"
@@ -227,8 +231,10 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
       unless alterm.get('genders.length') > 0
         valid = false
     valid
+  canChangeToStatus: (status) ->
+    @get('allowStatusChange') and (@get('enableProtectedStatuses') or @get('protectedStatuses').indexOf(status) < 0)
   setStatus: (status) ->
-    if @get('allowStatusChange')
+    if @canChangeToStatus(status)
       task = @get('tasks').findBy('language', @get('language'))
       task.set('status', status)
       task.save().then =>
