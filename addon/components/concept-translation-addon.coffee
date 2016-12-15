@@ -232,7 +232,7 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
         valid = false
     valid
   canChangeToStatus: (status) ->
-    @get('allowStatusChange') and (@get('enableProtectedStatuses') or @get('protectedStatuses').indexOf(status) < 0)
+    @get('currentUser.userIsAdmin') or (@get('allowStatusChange') and (@get('enableProtectedStatuses') or @get('protectedStatuses').indexOf(status) < 0))
   setStatus: (status) ->
     if @canChangeToStatus(status)
       task = @get('tasks').findBy('language', @get('language'))
