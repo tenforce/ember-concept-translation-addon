@@ -200,28 +200,36 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
     unless buffer then buffer += 'Change the status of this concept.'
     buffer
 
+  # checks if there is a term of each gender, empty terms are bad too (hackerdihackhack)
   hasOneOfEachGender: Ember.computed 'prefTerms.@each.genders', "altTerms.@each.genders", ->
     smale=false
     sfemale=false
     neutral=false
     valid = false
+    emptyPref = false
 
     prefTerms = @get('prefTerms')
     prefTerms.forEach (prefterm) ->
       genders = prefterm.get('genders')
+      form = term.get('literalForm')
+
       if genders.contains('standard female term') then sfemale = true
       if genders.contains('standard male term') then smale = true
       if genders.contains('neutral') then neutral = true
       if sfemale and smale and neutral then valid = true
+      if (form?.trim() == "") then emptyPref = true
 
     altTerms = @get('altTerms')
     altTerms.forEach (alterm) ->
       altgenders = alterm.get('genders')
-      if altgenders.contains('standard female term') then sfemale = true
-      if altgenders.contains('standard male term') then smale = true
-      if altgenders.contains('neutral') then neutral = true
-      if sfemale and smale and neutral then valid = true
-    return valid
+      form = alterm.get('literalForm')
+      if (form?.trim() != "")
+        if altgenders.contains('standard female term') then sfemale = true
+        if altgenders.contains('standard male term') then smale = true
+        if altgenders.contains('neutral') then neutral = true
+        if sfemale and smale and neutral then valid = true
+
+    return valid and not emptyPref
   altTermsHaveGender: Ember.computed "altTerms.@each.genders", ->
     @checkAltTermsHaveGender()
   checkAltTermsHaveGender: ->
