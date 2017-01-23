@@ -6,6 +6,8 @@
 `import SourceManager from '../mixins/source-manager'`
 
 TranslateHiddentermComponent = Ember.Component.extend KeyboardShortcuts, TranslationsUtils, SuggestionsManager, SourceManager,
+  saveAllButton: Ember.inject.service()
+
   layout: layout
   keyboardShortcuts: Ember.computed 'disableShortcuts', ->
     if @get('disableShortcuts') then return {}
@@ -25,7 +27,6 @@ TranslateHiddentermComponent = Ember.Component.extend KeyboardShortcuts, Transla
           action: 'goToQuestUrl'
           scoped: true
       obj
-  placeholder: "e.g., \"actress\" and confirm with ENTER"
 
   pathToQuest: Ember.computed 'term.literalForm', ->
     term = @get('term')
@@ -39,28 +40,55 @@ TranslateHiddentermComponent = Ember.Component.extend KeyboardShortcuts, Transla
 
   showQuestIfNotEmpty: Ember.computed 'term.literalForm', ->
     if @get('term.literalForm') then return true else return false
+
+  init: ->
+    @_super()
+    value = @get 'term.literalForm'
+    @set 'savedValue', value
+    @get('saveAllButton').subscribe(@)
+
+  dirty: Ember.computed 'term.literalForm', 'savedValue', ->
+    boundValue = @get('term.literalForm')
+    savedValue = @get('savedValue')
+    boundValue != savedValue
+
+  savedValue: undefined
+
+  saveField: ->
+    term = @get('term')
+    @sendAction('saveHiddenTerm', term)
+    @set 'savedValue', term.get('literalForm')
+
+  saveAllClick: ->
+    @saveField()
+
+
+
   actions:
+    saveField: ->
+      @saveField()
+
+    resetField: ->
+      savedValue = @get 'savedValue'
+      term = @get('term')
+      @changeTermValue(term, savedValue, false)
+
+
     goToQuestUrl: ->
       if @get 'showQuest'
         url = @get('pathToQuest')
         if @get 'showQuestIfNotEmpty'
           window.open(url)
+
     hiddenTermContentModified: (term, event) ->
-      if(event.keyCode == 13 && not event.shiftKey)
-        @changeTermValue(term, event, true)
-        @sendAction('saveHiddenTerm', term)
-      else
-        @changeTermValue(term, event, false)
+      @changeTermValue(term, event.target.value, false)
 
     removeHiddenTerm: (term, index) ->
       @sendAction('removeHiddenTerm', term, index)
     deleteTerm: ->
       term = @get('term')
       if term.get('literalForm')
-        event=
-          target:
-            value: ''
-        @changeTermValue(term, event, false)
+        @changeTermValue(term, '', false)
         term.set('source', null)
         if term.get('id') then term.save()
       else

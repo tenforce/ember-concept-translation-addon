@@ -17,9 +17,6 @@ SuggestionsManagerMixin = Ember.Mixin.create TranslationsUtils,
       buffer = term.get('literalForm')
       unless buffer is null or buffer is "" then buffer += " "
       buffer += translation
-      event =
-        target:
-          value: buffer
-      @changeTermValue(term, event, true)
+      @changeTermValue(term, buffer, true)
 
 `export default SuggestionsManagerMixin`

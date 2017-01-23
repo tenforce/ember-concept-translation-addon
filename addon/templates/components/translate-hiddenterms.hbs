@@ -16,8 +16,8 @@
 
       {{/if}}
       <div class='action'>
-      <button type="button" class="add" {{action 'showNewField'}}>+</button>
-    </div>
+        <button type="button" class="add" {{action 'showNewField'}}></button>
+      </div>
     {{else}}
       {{translate-hiddenterm term=newTerm concept=concept roles=roles allowDelete=false index="new" sourceLanguage=sourceLanguage targetLanguage=targetLanguage translationDisabled=translationDisabled saveHiddenTerm="saveNewHiddenTerm" removeHiddenTerm="removeNewHiddenTerm"
       saveSource="saveNewSource" displaySuggestions=displaySuggestions showQuest=showQuest showSource=showSource disableShortcuts=disableShortcuts}}

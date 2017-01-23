@@ -7,6 +7,8 @@
 `import TermManager from '../mixins/term-manager'`
 
 TranslatePreftermComponent = Ember.Component.extend KeyboardShortcuts, TranslationsUtils, SuggestionsManager, SourceManager, TermManager,
+  saveAllButton: Ember.inject.service()
+
   layout: layout
   keyboardShortcuts: Ember.computed 'disableShortcuts', ->
     if @get('disableShortcuts') then return {}
@@ -41,7 +43,40 @@ TranslatePreftermComponent = Ember.Component.extend KeyboardShortcuts, Translati
       return ""
 
 
+  init: ->
+    @_super()
+    value = @get 'term.literalForm'
+    @set 'savedValue', value
+    @get('saveAllButton').subscribe(@)
+
+  dirty: Ember.computed 'term.literalForm', 'savedValue', ->
+    boundValue = @get('term.literalForm')
+    savedValue = @get('savedValue')
+    boundValue != savedValue
+
+  savedValue: undefined
+
+  saveField: ->
+    term = @get('term')
+    @sendAction('savePrefTerm', term)
+    @set 'savedValue', term.get('literalForm')
+
+  saveAllClick: ->
+    @saveField()
+
+
+
+
   actions:
+    saveField: ->
+      @saveField()
+
+    resetField: ->
+      savedValue = @get 'savedValue'
+      term = @get('term')
+      @changeTermValue(term, savedValue, false)
+
+
     toggleNeutral: (term) ->
       @setGender(term, true, 'neutral')
     removePrefTerm: (term, index) ->
@@ -52,17 +87,10 @@ TranslatePreftermComponent = Ember.Component.extend KeyboardShortcuts, Translati
         if @get 'showQuestIfNotEmpty'
           window.open(url)
     prefTermContentModified: (term, event) ->
-      if(event.keyCode == 13 && not event.shiftKey)
-        @changeTermValue(term, event, true)
-        @sendAction('savePrefTerm', term)
-      else
-        @changeTermValue(term, event, false)
+        @changeTermValue(term, event.target.value, false)
     deleteTerm: ->
       term = @get('term')
-      event =
-        target:
-          value: ''
-      @changeTermValue(term, event, false)
+      @changeTermValue(term, '', false)
       term.set('source', null)
       if term.get('id') then term.save()
 

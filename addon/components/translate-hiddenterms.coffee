@@ -39,9 +39,6 @@ TranslateHiddentermsComponent = Ember.Component.extend TranslationsUtils, Source
     removeHiddenTerm: (term, index) ->
       @removeHiddenTerm(term, index)
     removeNewHiddenTerm: (term, index) ->
-      event=
-        target:
-          value: ''
-      @changeTermValue(term, event, false)
+      @changeTermValue(term, "", false)
       term.set('source', null)
 `export default TranslateHiddentermsComponent`

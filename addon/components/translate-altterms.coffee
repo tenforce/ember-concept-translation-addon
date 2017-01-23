@@ -57,10 +57,7 @@ TranslateAlttermsComponent = Ember.Component.extend TranslationsUtils, SourceSav
     removeAltTerm: (term, index) ->
       @removeAltTerm(term, index)
     removeNewAltTerm: (term, index) ->
-      event=
-        target:
-          value: ''
-      @changeTermValue(term, event, false)
+      @changeTermValue(term, '', false)
       term.set('source', null)
 
 

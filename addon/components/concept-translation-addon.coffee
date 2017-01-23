@@ -323,6 +323,8 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
     setStatus: (status) ->
       @setStatus(status['name'])
     saveDescription: (description) ->
+      # TODO dead code?
+      debugger
       if @get('concept.description')
         descObj = @get('concept.description').findBy('language', @get('language'))
       else

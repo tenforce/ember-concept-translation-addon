@@ -7,6 +7,8 @@
 `import TermManager from '../mixins/term-manager'`
 
 TranslateAlttermComponent = Ember.Component.extend KeyboardShortcuts, TranslationsUtils, SuggestionsManager, SourceManager, TermManager,
+  saveAllButton: Ember.inject.service()
+
   layout: layout
   keyboardShortcuts: Ember.computed 'disableShortcuts', ->
     if @get('disableShortcuts') then return {}
@@ -40,7 +42,37 @@ TranslateAlttermComponent = Ember.Component.extend KeyboardShortcuts, Translatio
   showQuestIfNotEmpty: Ember.computed 'term.literalForm', ->
     if @get('term.literalForm') then return true else return false
 
+
+  init: ->
+    @_super()
+    value = @get 'term.literalForm'
+    @set 'savedValue', value
+    @get('saveAllButton').subscribe(@)
+
+  dirty: Ember.computed 'term.literalForm', 'savedValue', ->
+    boundValue = @get('term.literalForm')
+    savedValue = @get('savedValue')
+    boundValue != savedValue
+
+  savedValue: undefined
+
+  saveField: ->
+    term = @get('term')
+    @sendAction('saveAltTerm', term)
+    @set 'savedValue', term.get('literalForm')
+
+  saveAllClick: ->
+    @saveField()
+
   actions:
+    saveField: ->
+      @saveField()
+
+    resetField: ->
+      savedValue = @get 'savedValue'
+      term = @get('term')
+      @changeTermValue(term, savedValue, false)
+
     goToQuestUrl: ->
       if @get 'showQuest'
         url = @get('pathToQuest')
@@ -48,11 +80,7 @@ TranslateAlttermComponent = Ember.Component.extend KeyboardShortcuts, Translatio
           window.open(url)
 
     altTermContentModified: (term, event) ->
-      if(event.keyCode == 13 && not event.shiftKey)
-        @changeTermValue(term, event, true)
-        @sendAction('saveAltTerm', term)
-      else
-        @changeTermValue(term, event, false)
+      @changeTermValue(term, event.target.value, false)
 
 
     removeAltTerm: (term, index) ->
@@ -60,10 +88,7 @@ TranslateAlttermComponent = Ember.Component.extend KeyboardShortcuts, Translatio
     deleteTerm: ->
       term = @get('term')
       if term.get('literalForm')
-        event=
-          target:
-            value: ''
-        @changeTermValue(term, event, false)
+        @changeTermValue(term, '', false)
         term.set('source', null)
         if term.get('id') then term.save()
       else
