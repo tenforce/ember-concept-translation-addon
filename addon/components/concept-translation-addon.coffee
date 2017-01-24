@@ -211,7 +211,7 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
     prefTerms = @get('prefTerms')
     prefTerms.forEach (prefterm) ->
       genders = prefterm.get('genders')
-      form = term.get('literalForm')
+      form = prefterm.get('literalForm')
 
       if genders.contains('standard female term') then sfemale = true
       if genders.contains('standard male term') then smale = true
