@@ -52,7 +52,7 @@ TranslateAlttermsComponent = Ember.Component.extend TranslationsUtils, SourceSav
         term.save().then =>
           newterm = @generateAltTerm()
           @set('newTerm', newterm)
-      @set('newField', false)
+          @set('newField', false)
 
     removeAltTerm: (term, index) ->
       @removeAltTerm(term, index)
