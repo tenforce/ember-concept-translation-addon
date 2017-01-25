@@ -1,30 +1,29 @@
-<div style={{if dirty "background-color:crimson;"}}>
-  <div class="term {{if shouldHighlight " focus"}}">
-    {{#if showSource}}
-      <div class="source"> {{show-source term=term saveSource="saveSource" buttonId=(concat "hiddenSources" index) displaySource=displaySource
-      disabled=translationDisabled disableShortcuts=disableShortcuts}}
-      </div>
-    {{/if}}
-    <div class="input-box">
-      <input disabled= {{translationDisabled}} type="text" value= {{term.literalForm}} onkeyup= {{action "hiddenTermContentModified" term}} class="tabbable hidden" name="hidden{{index}}" onfocus= {{action "focusTerm" true}}
-          onblur= {{action "focusTerm" false}} placeholder= {{placeholder}} />
-      {{#if showQuest}}
-        {{#if showQuestIfNotEmpty}}
-          <button class="quest-btn" {{action 'goToQuestUrl'}} title='Link to Quest' tabindex=-1></button>
-        {{/if}}
-      {{/if}}
+<div class="term {{if shouldHighlight " focus"}}">
+  {{#if showSource}}
+    <div class="source"> {{show-source term=term saveSource="saveSource" buttonId=(concat "hiddenSources" index) displaySource=displaySource
+    disabled=translationDisabled disableShortcuts=disableShortcuts}}
     </div>
-    {{! TODO style savebutton}}
-    <button type="button" class="saveField"  title="save field"  {{action 'saveField'}}  disabled={{not dirty}}>✔</button>
-    <button type="button" class="resetField" title="reset field" {{action 'resetField'}} disabled={{not dirty}}>✘</button>
-    {{#if allowDelete}}
-      <button tabindex=-1 disabled= {{translationDisabled}} class="action remove" {{action 'removeHiddenTerm' term index}}>
-        <i class="fa fa-minus"></i>
-      </button>
-    {{/if}}
-    {{#if displaySuggestions}}
-      {{show-suggestions term=term label=(await concept.defaultPrefLabel) sourceLanguage=sourceLanguage buttonId=(concat "hiddenTerm" index) targetLanguage=targetLanguage showSuggestions=showSuggestions shouldSendAction=true toggleSuggestions="toggleSuggestions"
-      closeSuggestions="closeSuggestions" selectSuggestion="selectSuggestion" disabled=translationDisabled}}
+  {{/if}}
+  <div class="input-box">
+    <input disabled= {{translationDisabled}} type="text" value= {{term.literalForm}} onkeyup= {{action "hiddenTermContentModified" term}} class="tabbable hidden" name="hidden{{index}}" onfocus= {{action "focusTerm" true}}
+        onblur= {{action "focusTerm" false}} placeholder= {{placeholder}} />
+    {{#if showQuest}}
+      {{#if showQuestIfNotEmpty}}
+        <button class="quest-btn" {{action 'goToQuestUrl'}} title='Link to Quest' tabindex=-1></button>
+      {{/if}}
     {{/if}}
   </div>
+  <div class="actions">
+    <button type="button" class="save"   title="save field"  {{action 'saveField'}}  disabled={{not dirty}}></button>
+    <button type="button" class="cancel" title="reset field" {{action 'resetField'}} disabled={{not dirty}}></button>
+  </div>
+  {{#if allowDelete}}
+    <button tabindex=-1 disabled= {{translationDisabled}} class="action remove" {{action 'removeHiddenTerm' term index}}>
+      <i class="fa fa-minus"></i>
+    </button>
+  {{/if}}
+  {{#if displaySuggestions}}
+    {{show-suggestions term=term label=(await concept.defaultPrefLabel) sourceLanguage=sourceLanguage buttonId=(concat "hiddenTerm" index) targetLanguage=targetLanguage showSuggestions=showSuggestions shouldSendAction=true toggleSuggestions="toggleSuggestions"
+    closeSuggestions="closeSuggestions" selectSuggestion="selectSuggestion" disabled=translationDisabled}}
+  {{/if}}
 </div>
