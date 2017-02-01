@@ -86,8 +86,16 @@ TranslatePreftermComponent = Ember.Component.extend KeyboardShortcuts, Translati
         url = @get('pathToQuest')
         if @get 'showQuestIfNotEmpty'
           window.open(url)
+          
     prefTermContentModified: (term, event) ->
+      if event.keyCode == 13 # Enter key
+        @saveField()
+      else
         @changeTermValue(term, event.target.value, false)
+
+
+
+
     deleteTerm: ->
       term = @get('term')
       @changeTermValue(term, '', false)

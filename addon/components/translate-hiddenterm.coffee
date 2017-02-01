@@ -54,7 +54,7 @@ TranslateHiddentermComponent = Ember.Component.extend KeyboardShortcuts, Transla
 
   savedValue: undefined
 
-  # Reset the savedValue when the term is swapped. In particular when adding a new term. 
+  # Reset the savedValue when the term is swapped. In particular when adding a new term.
   newTermObserver: Ember.observer 'term', ->
     @set('savedValue', @get('term.literalForm'))
 
@@ -85,8 +85,11 @@ TranslateHiddentermComponent = Ember.Component.extend KeyboardShortcuts, Transla
           window.open(url)
 
     hiddenTermContentModified: (term, event) ->
-      @changeTermValue(term, event.target.value, false)
-
+      if event.keyCode == 13 # Enter key
+        @saveField()
+      else
+        @changeTermValue(term, event.target.value, false)
+        
     removeHiddenTerm: (term, index) ->
       @sendAction('removeHiddenTerm', term, index)
     deleteTerm: ->

@@ -56,7 +56,7 @@ TranslateAlttermComponent = Ember.Component.extend KeyboardShortcuts, Translatio
 
   savedValue: undefined
 
-  # Reset the savedValue when the term is swapped. In particular when adding a new term. 
+  # Reset the savedValue when the term is swapped. In particular when adding a new term.
   newTermObserver: Ember.observer 'term', ->
     @set('savedValue', @get('term.literalForm'))
 
@@ -84,7 +84,10 @@ TranslateAlttermComponent = Ember.Component.extend KeyboardShortcuts, Translatio
           window.open(url)
 
     altTermContentModified: (term, event) ->
-      @changeTermValue(term, event.target.value, false)
+      if event.keyCode == 13 # Enter key
+        @saveField()
+      else
+        @changeTermValue(term, event.target.value, false)
 
 
     removeAltTerm: (term, index) ->
