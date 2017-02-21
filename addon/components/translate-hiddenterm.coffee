@@ -66,17 +66,17 @@ TranslateHiddentermComponent = Ember.Component.extend KeyboardShortcuts, Transla
   saveAllClick: ->
     @saveField()
 
-
+  resetField: ->
+    savedValue = @get 'savedValue'
+    term = @get('term')
+    @changeTermValue(term, savedValue, false)
 
   actions:
     saveField: ->
       @saveField()
 
     resetField: ->
-      savedValue = @get 'savedValue'
-      term = @get('term')
-      @changeTermValue(term, savedValue, false)
-
+      @resetField()
 
     goToQuestUrl: ->
       if @get 'showQuest'
@@ -89,7 +89,7 @@ TranslateHiddentermComponent = Ember.Component.extend KeyboardShortcuts, Transla
         @saveField()
       else
         @changeTermValue(term, event.target.value, false)
-        
+
     removeHiddenTerm: (term, index) ->
       @sendAction('removeHiddenTerm', term, index)
     deleteTerm: ->

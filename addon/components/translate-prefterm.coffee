@@ -64,18 +64,17 @@ TranslatePreftermComponent = Ember.Component.extend KeyboardShortcuts, Translati
   saveAllClick: ->
     @saveField()
 
-
-
+  resetField: ->
+    savedValue = @get 'savedValue'
+    term = @get('term')
+    @changeTermValue(term, savedValue, false)
 
   actions:
     saveField: ->
       @saveField()
 
     resetField: ->
-      savedValue = @get 'savedValue'
-      term = @get('term')
-      @changeTermValue(term, savedValue, false)
-
+      @resetField()
 
     toggleNeutral: (term) ->
       @setGender(term, true, 'neutral')
@@ -86,7 +85,7 @@ TranslatePreftermComponent = Ember.Component.extend KeyboardShortcuts, Translati
         url = @get('pathToQuest')
         if @get 'showQuestIfNotEmpty'
           window.open(url)
-          
+
     prefTermContentModified: (term, event) ->
       if event.keyCode == 13 # Enter key
         @saveField()
