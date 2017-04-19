@@ -30,7 +30,7 @@ TranslatePreftermsComponent = Ember.Component.extend TranslationsUtils, SourceSa
     termRoles = @parseRolesFromString(term)
     if termRoles.length > 0
       term.set('roles', [])
-      promises.push(@setGender(term, false, "neutral"))
+      promises.push(@setRole(term, false, "neutral"))
     termRoles.forEach (role) =>
       if ["standard female term", "standard male term"].contains role
         if role is "standard female term" then promises.push(@setAsPreferred(term, false, "female", true))

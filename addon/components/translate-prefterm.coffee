@@ -77,7 +77,7 @@ TranslatePreftermComponent = Ember.Component.extend KeyboardShortcuts, Translati
       @resetField()
 
     toggleNeutral: (term) ->
-      @setGender(term, true, 'neutral')
+      @setRole(term, true, 'neutral')
     removePrefTerm: (term, index) ->
       @sendAction('removePrefTerm', term, index)
     goToQuestUrl: ->

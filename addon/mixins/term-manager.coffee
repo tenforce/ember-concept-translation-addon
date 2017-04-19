@@ -27,11 +27,11 @@ TermManagerMixin = Ember.Mixin.create
   removeRoleFromTerms: (role) ->
     @get('altTerms').forEach (t) ->
       if t.get('id') and t.hasRole(role.get('preflabel'))
-        t.setGender(role, false).then ->
+        t.setRole(role, false).then ->
           t.save()
     @get('prefTerms').forEach (t) ->
       if t.get('id') and t.hasRole(role.get('preflabel'))
-        t.setGender(role, false).then ->
+        t.setRole(role, false).then ->
           t.save()
 
   setAsPreferred: (term, save, gender, preferred) ->
@@ -44,12 +44,12 @@ TermManagerMixin = Ember.Mixin.create
     promises.push(term.setRole(sg, true))
     Ember.RSVP.Promise.all(promises).then ->
       if save then term.save()
-  setGender: (term, save, gender) ->
+  setRole: (term, save, gender) ->
     return unless term
     g = @get('roles').findBy('preflabel', gender)
     term.setRole(g, true).then =>
       if save then term.save()
-  toggleGender: (term, label) ->
+  toggleRole: (term, label) ->
     role = @get('roles').findBy('preflabel', label)
     term.toggleRole(role)
     term.save() if term.get('id')
@@ -69,19 +69,19 @@ TermManagerMixin = Ember.Mixin.create
   actions:
     toggleFemale: (term) ->
       unless term.hasRole('standard female term')
-        @toggleGender(term, 'female')
+        @toggleRole(term, 'female')
     toggleMale: (term) ->
       unless term.hasRole('standard male term')
-        @toggleGender(term, 'male')
+        @toggleRole(term, 'male')
     toggleNeutral: (term) ->
-      @toggleGender(term, 'neutral')
+      @toggleRole(term, 'neutral')
     toggleStandardMale: (term) ->
       unless term.hasRole('male')
-        @toggleGender(term, 'male')
+        @toggleRole(term, 'male')
       @togglePreferred(term, 'standard male term')
     toggleStandardFemale: (term) ->
       unless term.hasRole('female')
-        @toggleGender(term, 'female')
+        @toggleRole(term, 'female')
       @togglePreferred(term, 'standard female term')
     togglePreferredMale: (term) ->
       @togglePreferred(term, 'standard male term')
