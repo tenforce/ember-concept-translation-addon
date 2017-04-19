@@ -172,7 +172,7 @@ ConceptTranslationAddonComponent = Ember.Component.extend KeyboardShortcuts, Tra
         term = @newLabel()
         term.set('prefLabelOf', concept)
         role = roles.findBy('preflabel', 'neutral')
-        term.setGender(role, true)
+        term.setRole(role, true)
         prefTerms?.push(term)
         term.save()
       sorted = prefTerms.sort (a, b) ->

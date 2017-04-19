@@ -40,18 +40,18 @@ TermManagerMixin = Ember.Mixin.create
     unless preferred then g = @get('roles').findBy('preflabel', gender)
     sg = @get('roles').findBy('preflabel', "standard #{gender} term")
     @removeRoleFromTerms(sg)
-    unless preferred then promises.push(term.setGender(g, true))
-    promises.push(term.setGender(sg, true))
+    unless preferred then promises.push(term.setRole(g, true))
+    promises.push(term.setRole(sg, true))
     Ember.RSVP.Promise.all(promises).then ->
       if save then term.save()
   setGender: (term, save, gender) ->
     return unless term
     g = @get('roles').findBy('preflabel', gender)
-    term.setGender(g, true).then =>
+    term.setRole(g, true).then =>
       if save then term.save()
   toggleGender: (term, label) ->
     role = @get('roles').findBy('preflabel', label)
-    term.toggleGender(role)
+    term.toggleRole(role)
     term.save() if term.get('id')
   # only one term can be preferred male/female
   # this removes the role from all terms and add's it to the selected one
@@ -59,12 +59,12 @@ TermManagerMixin = Ember.Mixin.create
     return unless term.get("id")
     role = @get('roles').findBy('preflabel', label)
     if term.hasRole(label)
-      term.setGender(role, false).then ->
+      term.setRole(role, false).then ->
         term.save()
     else
       @removeRoleFromTerms(role)
       if term.get("id")
-        term.setGender(role, true).then ->
+        term.setRole(role, true).then ->
           term.save()
   actions:
     toggleFemale: (term) ->
