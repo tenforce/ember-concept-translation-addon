@@ -58,7 +58,7 @@ TermManagerMixin = Ember.Mixin.create
   togglePreferred: (term, label) ->
     return unless term.get("id")
     role = @get('roles').findBy('preflabel', label)
-    if term.hasRole(label)
+    if term.hasGender(label)
       term.setRole(role, false).then ->
         term.save()
     else
@@ -68,19 +68,20 @@ TermManagerMixin = Ember.Mixin.create
           term.save()
   actions:
     toggleFemale: (term) ->
-      unless term.hasRole('standard female term')
+      unless term.hasGender('standard female term')
         @toggleRole(term, 'female')
     toggleMale: (term) ->
-      unless term.hasRole('standard male term')
+      unless term.hasGender('standard male term')
         @toggleRole(term, 'male')
+      else
     toggleNeutral: (term) ->
       @toggleRole(term, 'neutral')
     toggleStandardMale: (term) ->
-      unless term.hasRole('male')
+      unless term.hasGender('male')
         @toggleRole(term, 'male')
       @togglePreferred(term, 'standard male term')
     toggleStandardFemale: (term) ->
-      unless term.hasRole('female')
+      unless term.hasGender('female')
         @toggleRole(term, 'female')
       @togglePreferred(term, 'standard female term')
     togglePreferredMale: (term) ->
